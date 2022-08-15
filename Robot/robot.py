@@ -1,8 +1,13 @@
 class Robot:
     def __init__(self):
         self.data = {}
+        self.running = True
 
     def run(self):
+        pass
+
+    def stop(self):
+        # Stop all actuators
         pass
 
     def trigger_start(self, trigger):

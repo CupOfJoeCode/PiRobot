@@ -10,9 +10,10 @@ app = Flask(__name__)
 
 
 def bot_main():
-    while True:
+    while bot.running:
         bot.run()
         sleep(0.05)
+    bot.stop()
 
 
 @app.route('/')
@@ -35,6 +36,12 @@ def trigger_end():
 @app.route('/get_data')
 def get_data():
     return json.dumps(bot.get_data())
+
+
+@app.route('/stop')
+def stop():
+    bot.running = False
+    return ''
 
 
 if __name__ == '__main__':

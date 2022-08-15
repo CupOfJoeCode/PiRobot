@@ -27,10 +27,14 @@ def main():
                 pg.quit()
                 quit()
             elif e.type == pg.KEYDOWN:
-                if e.key in key_codes:
+                if e.key == pg.K_RETURN:
+                    requests.get(f'{server}stop')
+
+                elif e.key in key_codes:
                     requests.get(
                         f'{server}trigger_start?trigger={{key_codes[e.key]}}')
                     d.fill(tuple(map(lambda _: randint(0, 255), [0]*3)))
+
             elif e.type == pg.KEYUP:
                 if e.key in key_codes:
                     requests.get(
