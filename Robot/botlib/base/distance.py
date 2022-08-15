@@ -2,11 +2,11 @@ class DistanceSensor:
     def __init__(self):
         pass
 
-    def get_raw(self):
+    def get_seconds(self):
         return 0
 
     def get_centimeters(self):
-        return (self.get_raw() * 34300) / 2.0
+        return (self.get_seconds() * 34300) / 2.0
 
     def get_meters(self):
         return self.get_centimeters() / 100.0
