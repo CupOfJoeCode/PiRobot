@@ -1,28 +1,19 @@
+from pibot.rpipwm import RpiPWMOutput
+
+
 class Robot:
     def __init__(self):
-        self.data = {
-            'Up': False,
-            'Num': 0,
-            'Text': 'Hello'
-        }
+        self.data = {}
         self.running = True
 
     def run(self):
-        self.data['Stopped'] = False
-        self.data['Num/pi'] = self.data['Num'] / 3.14159
+        pass
 
     def stop(self):
-        self.data['Stopped'] = True
+        pass
 
     def trigger_start(self, trigger):
-        if trigger == 'up':
-            self.data['Up'] = True
-        elif trigger == 'action':
-            self.data['Num'] += 1
+        pass
 
     def trigger_end(self, trigger):
-        if trigger == 'up':
-            self.data['Up'] = False
-
-    def get_data(self):
-        return self.data
+        pass

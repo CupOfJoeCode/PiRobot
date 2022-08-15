@@ -1,4 +1,4 @@
-from base.digitalout import DigitalOutput
+from pibot.base.digitalout import DigitalOutput
 
 
 class RpiOutput(DigitalOutput):

@@ -1,4 +1,4 @@
-from base.motor import Motor
+from pibot.base.motor import Motor
 
 
 class RpiHBridge(Motor):

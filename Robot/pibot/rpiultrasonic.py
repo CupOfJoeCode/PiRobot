@@ -1,4 +1,4 @@
-from base.distance import DistanceSensor
+from pibot.base.distance import DistanceSensor
 
 
 class RpiUltraSonic(DistanceSensor):

@@ -12,8 +12,10 @@ app = Flask(__name__)
 def bot_main():
     while bot.running:
         bot.run()
+        bot.data['Stopped'] = False
         sleep(0.05)
     bot.stop()
+    bot.data['Stopped'] = True
 
 
 @app.route('/')
@@ -35,10 +37,10 @@ def trigger_end():
 
 @app.route('/get_data')
 def get_data():
-    return json.dumps(bot.get_data())
+    return json.dumps(bot.data)
 
 
-@app.route('/stop')
+@ app.route('/stop')
 def stop():
     bot.running = False
     return ''
