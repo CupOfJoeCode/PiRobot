@@ -1,20 +1,28 @@
 class Robot:
     def __init__(self):
-        self.data = {}
+        self.data = {
+            'Up': False,
+            'Num': 0,
+            'Text': 'Hello'
+        }
         self.running = True
 
     def run(self):
-        pass
+        self.data['Stopped'] = False
+        self.data['Num/pi'] = self.data['Num'] / 3.14159
 
     def stop(self):
-        # Stop all actuators
-        pass
+        self.data['Stopped'] = True
 
     def trigger_start(self, trigger):
-        print(f'{trigger} Started')
+        if trigger == 'up':
+            self.data['Up'] = True
+        elif trigger == 'action':
+            self.data['Num'] += 1
 
     def trigger_end(self, trigger):
-        print(f'{trigger} Ended')
+        if trigger == 'up':
+            self.data['Up'] = False
 
     def get_data(self):
         return self.data

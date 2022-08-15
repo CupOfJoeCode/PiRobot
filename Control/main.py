@@ -1,8 +1,8 @@
-from random import randint
 import pygame as pg
 import requests
 import sys
 import json
+from widget import DataWidget
 
 
 def main():
@@ -16,6 +16,7 @@ def main():
     }
 
     pg.init()
+    pg.display.set_caption('PiRobot Controller')
     d = pg.display.set_mode((800, 600))
     ip = sys.argv[1]
     port = sys.argv[2]
@@ -32,17 +33,31 @@ def main():
 
                 elif e.key in key_codes:
                     requests.get(
-                        f'{server}trigger_start?trigger={{key_codes[e.key]}}')
-                    d.fill(tuple(map(lambda _: randint(0, 255), [0]*3)))
+                        f'{server}trigger_start?trigger={key_codes[e.key]}')
 
             elif e.type == pg.KEYUP:
                 if e.key in key_codes:
                     requests.get(
-                        f'{server}trigger_end?trigger={{key_codes[e.key]}}')
-                    d.fill(tuple(map(lambda _: randint(0, 255), [0]*3)))
+                        f'{server}trigger_end?trigger={key_codes[e.key]}')
 
         robot_data = json.loads(requests.get(f'{server}get_data').text)
-        print(robot_data)
+
+        d.fill((0, 0, 0))
+
+        x_pos = 0
+        y_pos = 0
+
+        for key in robot_data:
+            widget = DataWidget()
+            widget.set_title(key)
+            widget.set_value(robot_data[key])
+
+            d.blit(widget.get_surface(), (x_pos*140+10, y_pos*140+10))
+
+            x_pos += 1
+            if x_pos > 8:
+                x_pos = 0
+                y_pos += 1
 
         pg.display.update()
 
