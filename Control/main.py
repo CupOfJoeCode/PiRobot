@@ -17,6 +17,7 @@ def main():
 
     pg.init()
     pg.display.set_caption('PiRobot Controller')
+    pg.display.set_icon(pg.image.load('icon.png'))
     d = pg.display.set_mode((800, 600))
     ip = sys.argv[1]
     port = sys.argv[2]
