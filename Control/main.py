@@ -55,7 +55,7 @@ def main():
             d.blit(widget.get_surface(), (x_pos*140+10, y_pos*140+10))
 
             x_pos += 1
-            if x_pos > 8:
+            if x_pos > 5:
                 x_pos = 0
                 y_pos += 1
 
