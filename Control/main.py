@@ -28,14 +28,17 @@ def main():
                 quit()
             elif e.type == pg.KEYDOWN:
                 if e.key in key_codes:
-                    requests.get(f'{server}{key_codes[e.key]}_start')
+                    requests.get(
+                        f'{server}trigger_start?trigger={{key_codes[e.key]}}')
                     d.fill(tuple(map(lambda _: randint(0, 255), [0]*3)))
             elif e.type == pg.KEYUP:
                 if e.key in key_codes:
-                    requests.get(f'{server}{key_codes[e.key]}_end')
+                    requests.get(
+                        f'{server}trigger_end?trigger={{key_codes[e.key]}}')
                     d.fill(tuple(map(lambda _: randint(0, 255), [0]*3)))
 
         robot_data = json.loads(requests.get(f'{server}get_data').text)
+        print(robot_data)
 
         pg.display.update()
 
