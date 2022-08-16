@@ -7,3 +7,6 @@ class Motor:
 
     def get(self):
         return self.speed
+
+    def stop(self):
+        self.set(0)
