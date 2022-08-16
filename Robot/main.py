@@ -40,6 +40,20 @@ def get_data():
     return json.dumps(bot.data)
 
 
+@app.route('/set_data')
+def set_data():
+    key = request.args.get('key')
+    val = request.args.get('value')
+    if val in ['True', 'False']:
+        bot.data[key] = val == 'True'
+    else:
+        try:
+            bot.data[key] = float(val)
+        except ValueError:
+            bot.data[key] = val
+    return ''
+
+
 @app.route('/stop')
 def stop():
     bot.running = False
