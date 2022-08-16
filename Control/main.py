@@ -31,7 +31,8 @@ def main():
             elif e.type == pg.KEYDOWN:
                 if e.key == pg.K_RETURN:
                     requests.get(f'{server}stop')
-
+                elif e.key == pg.K_BACKSLASH:
+                    requests.get(f'{server}start')
                 elif e.key in key_codes:
                     requests.get(
                         f'{server}trigger_start?trigger={key_codes[e.key]}')

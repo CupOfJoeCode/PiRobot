@@ -40,13 +40,20 @@ def get_data():
     return json.dumps(bot.data)
 
 
-@ app.route('/stop')
+@app.route('/stop')
 def stop():
     bot.running = False
     return ''
 
 
+@app.route('/start')
+def start():
+    if not bot.running:
+        bot.running = True
+        robot_thread = Thread(target=bot_main)
+        robot_thread.start()
+
+
 if __name__ == '__main__':
-    robot_thread = Thread(target=bot_main)
-    robot_thread.start()
+    bot.data['Stopped'] = True
     app.run(host=sys.argv[1], port=sys.argv[2], debug=False)

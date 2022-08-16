@@ -1,10 +1,9 @@
-from pibot.rpipwm import RpiPWMOutput
 
 
 class Robot:
     def __init__(self):
         self.data = {}
-        self.running = True
+        self.running = False
 
     def run(self):
         pass
