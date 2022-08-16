@@ -1,3 +1,6 @@
+from time import sleep
+
+
 class DigitalOutput:
     def __init__(self):
         self.state = False
@@ -10,3 +13,8 @@ class DigitalOutput:
 
     def reset(self):
         self.write(False)
+
+    def pulse(self, time=0.01, low=False):
+        self.write(True != low)
+        sleep(time)
+        self.write(False != low)
