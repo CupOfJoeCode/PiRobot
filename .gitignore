@@ -1,4 +1,5 @@
 *.blend1
+*.dxf~
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
