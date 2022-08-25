@@ -11,7 +11,7 @@ class Robot:
             'On': False
         }
         self.running = False
-        self.motor = RpiHBridge(12, 19, MOTOR_FREQ)
+        self.motor = RpiHBridge(12, 19, pwm_freq=MOTOR_FREQ)
 
     def run(self):
         self.data['Speed'] = min(1, max(-1, self.data['Speed']))
