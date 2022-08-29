@@ -14,12 +14,11 @@ class RpiHBridge(Motor):
         self.inverted = inverted
 
     def set(self, speed):
-        if (speed < 0) != self.inverted:
-            self.pwm1.set(abs(speed))
-            self.pwm0.set(0)
-        else:
-            self.pwm0.set(abs(speed))
-            self.pwm1.set(0)
+        realSpeed = speed * 0.5 + 0.5
+        if self.inverted:
+            realSpeed = 1 - realSpeed
+        self.pwm1.set(realSpeed)
+        self.pwm0.set(1.0-realSpeed)
         self.speed = speed
 
     def stop(self):

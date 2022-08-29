@@ -7,6 +7,7 @@ class DataWidget:
         self.text = ''
         self.background = ((255, 255, 255))
         self.font = pg.font.Font(None, 32)
+        self.isbool = False
 
     def get_surface(self):
         out_surface = pg.Surface((128, 128))
@@ -25,5 +26,7 @@ class DataWidget:
         if type(data) == bool:
             self.background = (200, 60, 60) if data else (60, 30, 30)
             self.text = ''
+            self.isbool = True
         else:
             self.text = str(data)
+            self.isbool = False

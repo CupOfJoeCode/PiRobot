@@ -67,11 +67,15 @@ def main():
             if clicked:
                 if mouse_x in range(widget_x, widget_x + 128):
                     if mouse_y in range(widget_y, widget_y + 128):
-                        new_val = easygui.enterbox(
-                            key, "Set Value", robot_data[key])
-                        if new_val is not None:
+                        if widget.isbool:
                             requests.get(
-                                f'{server}set_data?key={key}&value={new_val}')
+                                f'{server}set_data?key={key}&value={not robot_data[key]}')
+                        else:
+                            new_val = easygui.enterbox(
+                                key, "Set Value", robot_data[key])
+                            if new_val is not None:
+                                requests.get(
+                                    f'{server}set_data?key={key}&value={new_val}')
 
             x_pos += 1
             if x_pos > 5:

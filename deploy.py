@@ -1,6 +1,6 @@
 import os
 import sys
-IP = '192.168.113.38'
+IP = '192.168.222.38'
 USERNAME = 'pi'
 PORT = 1234
 
