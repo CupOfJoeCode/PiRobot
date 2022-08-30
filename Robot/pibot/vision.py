@@ -1,5 +1,13 @@
+from dataclasses import dataclass
 import cv2
 import numpy as np
+
+
+@dataclass
+class VisionTarget:
+    x: float
+    y: float
+    radius: float
 
 
 class Capture:
@@ -40,4 +48,9 @@ class Capture:
 
             radius = (maxs[0]-mins[0] + maxs[1]-maxs[0]) // 4
             radius = max(radius, 1)
-            return ((pos[1]/height)*2-1, (pos[0]/width)*2-1), radius/width
+            return VisionTarget(
+                (pos[1]/height)*2-1,
+                (pos[0]/width)*2-1,
+                radius/width
+            )
+        return None
