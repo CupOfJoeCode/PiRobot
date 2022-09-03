@@ -1,3 +1,4 @@
+import base64
 import pygame as pg
 import requests
 import sys
@@ -24,6 +25,9 @@ def main():
     port = sys.argv[2]
     server = f'http://{ip}:{port}/'
 
+    camera = pg.Surface((128, 128))
+    camera.fill((60, 200, 60))
+    frame_count = 0
     while True:
         clicked = False
         for e in pg.event.get():
@@ -50,7 +54,7 @@ def main():
         robot_data = json.loads(requests.get(f'{server}get_data').text)
         mouse_x, mouse_y = pg.mouse.get_pos()
         d.fill((0, 0, 0))
-
+        d.blit(pg.transform.scale(camera, (256, 256)), (800-256, 600-256))
         x_pos = 0
         y_pos = 0
 
@@ -82,7 +86,15 @@ def main():
                 x_pos = 0
                 y_pos += 1
 
+        frame_count += 1
+        if(frame_count > 30):
+            data = requests.get(f'{server}camera').text
+            data = base64.b16decode(data)
+            camera = pg.image.frombuffer(data, (128, 128), 'RGB')
+            frame_count = 0
+
         pg.display.update()
+        pg.time.wait(1)
 
 
 if __name__ == '__main__':

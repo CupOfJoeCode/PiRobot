@@ -1,12 +1,19 @@
+import logging
 from threading import Thread
 from robot import Robot
 from flask import Flask, request
 import sys
 from time import sleep
 import json
+from PIL import Image
+import cv2
+import base64
 
 bot = Robot()
 app = Flask(__name__)
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 
 def bot_main():
@@ -21,6 +28,13 @@ def bot_main():
 @app.route('/')
 def root():
     return ''
+
+
+@app.route('/camera')
+def camera():
+    img = cv2.cvtColor(bot.camera_frame, cv2.COLOR_BGR2RGB)
+    img = Image.fromarray(img).resize((128, 128)).tobytes()
+    return base64.b16encode(img)
 
 
 @app.route('/trigger_start')

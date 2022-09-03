@@ -12,6 +12,12 @@ class VisionTarget:
     height: int
 
 
+def blank_image():
+    return np.array(
+        [[[0, 0, 0]]]
+    )
+
+
 def get_target_from_mask(mask):
     height = len(mask)
     width = len(mask[0])
