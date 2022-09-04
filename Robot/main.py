@@ -1,12 +1,20 @@
+import logging
 from threading import Thread
 from robot import Robot
 from flask import Flask, request
 import sys
 from time import sleep
 import json
+from PIL import Image
+import cv2
+import base64
+import numpy as np
 
 bot = Robot()
 app = Flask(__name__)
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 
 def bot_main():
@@ -20,6 +28,15 @@ def bot_main():
 
 @app.route('/')
 def root():
+    return ''
+
+
+@app.route('/camera')
+def camera():
+    if np.any(bot.camera_frame):
+        img = cv2.cvtColor(bot.camera_frame, cv2.COLOR_BGR2RGB)
+        img = Image.fromarray(img).resize((128, 128)).tobytes()
+        return base64.b16encode(img)
     return ''
 
 
@@ -52,6 +69,27 @@ def set_data():
         except ValueError:
             bot.data[key] = val
     return ''
+
+
+@app.route('/set_color')
+def set_color():
+    red = int(request.args.get('red'))
+    green = int(request.args.get('green'))
+    blue = int(request.args.get('blue'))
+    threshold = int(request.args.get('threshold'))
+    bot.vision.set_target_color(red, green, blue, threshold)
+    return ''
+
+
+@app.route('/get_target')
+def get_target():
+    if bot.camera_target is None:
+        return ''
+    return json.dumps({
+        'x': bot.camera_target.x,
+        'y': bot.camera_target.y,
+        'radius': bot.camera_target.radius
+    })
 
 
 @app.route('/stop')

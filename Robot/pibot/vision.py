@@ -12,6 +12,12 @@ class VisionTarget:
     height: int
 
 
+def blank_image():
+    return np.array(
+        [[[0, 0, 0]]]
+    )
+
+
 def get_target_from_mask(mask):
     height = len(mask)
     width = len(mask[0])
@@ -26,7 +32,7 @@ def get_target_from_mask(mask):
         return VisionTarget(
             (pos[1]/width)*2-1,
             (pos[0]/height)*2-1,
-            radius,
+            radius/width,
             width,
             height
         )
@@ -93,6 +99,9 @@ class Capture:
         frame = self.get_frame()
 
         min_color, max_color = self.get_target_min_max()
-        mask = cv2.inRange(frame, min_color, max_color)
 
-        return get_target_from_mask(mask), frame, mask
+        if np.any(frame):
+            mask = cv2.inRange(frame, min_color, max_color)
+
+            return get_target_from_mask(mask), frame, mask
+        return None, frame, frame
