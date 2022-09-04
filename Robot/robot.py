@@ -9,10 +9,12 @@ class Robot:
         self.running = False
         self.vision = Capture()
         self.camera_frame = self.vision.get_frame()
+        self.camera_target = None
 
     def run(self):
         target, frame, mask = self.vision.get_target()
-        self.camera_frame = self.vision.get_frame()
+        self.camera_frame = frame
+        self.camera_target = target
 
     def stop(self):
         pass

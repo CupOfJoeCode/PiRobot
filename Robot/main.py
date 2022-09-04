@@ -68,6 +68,27 @@ def set_data():
     return ''
 
 
+@app.route('/set_color')
+def set_color():
+    red = int(request.args.get('red'))
+    green = int(request.args.get('green'))
+    blue = int(request.args.get('blue'))
+    threshold = int(request.args.get('threshold'))
+    bot.vision.set_target_color(red, green, blue, threshold)
+    return ''
+
+
+@app.route('/get_target')
+def get_target():
+    if bot.camera_target is None:
+        return ''
+    return json.dumps({
+        'x': bot.camera_target.x,
+        'y': bot.camera_target.y,
+        'radius': bot.camera_target.radius
+    })
+
+
 @app.route('/stop')
 def stop():
     bot.running = False

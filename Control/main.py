@@ -5,6 +5,7 @@ import sys
 import json
 from widget import DataWidget
 import easygui
+import pygame.gfxdraw
 
 
 def main():
@@ -28,6 +29,8 @@ def main():
     camera = pg.Surface((128, 128))
     camera.fill((60, 200, 60))
     frame_count = 0
+    camera_x = d.get_width() - 256
+    camera_y = d.get_height() - 256
     while True:
         clicked = False
         for e in pg.event.get():
@@ -52,9 +55,20 @@ def main():
                 if e.button == 1:
                     clicked = True
         robot_data = json.loads(requests.get(f'{server}get_data').text)
+        camera_target = requests.get(f'{server}get_target').text
+        if camera_target:
+            camera_target = json.loads(camera_target)
+        else:
+            camera_target = None
         mouse_x, mouse_y = pg.mouse.get_pos()
         d.fill((0, 0, 0))
-        d.blit(pg.transform.scale(camera, (256, 256)), (800-256, 600-256))
+        d.blit(pg.transform.scale(camera, (256, 256)), (camera_x, camera_y))
+        if camera_target is not None:
+            target_x = int((camera_target['x']*0.5+0.5)*256)
+            target_y = int((camera_target['y']*0.5+0.5)*256)
+            target_radius = int(camera_target['radius']*512)
+            pg.draw.circle(d, (0, 255, 0), (target_x +
+                           camera_x, target_y+camera_y), target_radius)
         x_pos = 0
         y_pos = 0
 
@@ -85,6 +99,19 @@ def main():
             if x_pos > 5:
                 x_pos = 0
                 y_pos += 1
+
+        if clicked:
+            if mouse_x in range(camera_x, d.get_width()):
+                if mouse_y in range(camera_y, d.get_height()):
+                    pixel_x = (mouse_x - camera_x)//2
+                    pixel_y = (mouse_y - camera_y)//2
+                    clr = camera.get_at((pixel_x, pixel_y))
+                    new_val = easygui.enterbox(
+                        "Set Threshold", "Set Threshold", 30)
+                    if new_val is not None:
+                        if new_val.isdigit():
+                            requests.get(
+                                f'{server}set_color?red={clr[0]}&green={clr[1]}&blue={clr[2]}&threshold={new_val}')
 
         frame_count += 1
         if(frame_count > 30):

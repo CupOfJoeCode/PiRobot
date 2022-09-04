@@ -32,7 +32,7 @@ def get_target_from_mask(mask):
         return VisionTarget(
             (pos[1]/width)*2-1,
             (pos[0]/height)*2-1,
-            radius,
+            radius/width,
             width,
             height
         )
