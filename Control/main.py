@@ -68,7 +68,7 @@ def main():
             target_y = int((camera_target['y']*0.5+0.5)*256)
             target_radius = int(camera_target['radius']*512)
             pg.draw.circle(d, (0, 255, 0), (target_x +
-                           camera_x, target_y+camera_y), target_radius)
+                           camera_x, target_y+camera_y), target_radius, 2)
         x_pos = 0
         y_pos = 0
 
@@ -116,8 +116,9 @@ def main():
         frame_count += 1
         if(frame_count > 30):
             data = requests.get(f'{server}camera').text
-            data = base64.b16decode(data)
-            camera = pg.image.frombuffer(data, (128, 128), 'RGB')
+            if data:
+                data = base64.b16decode(data)
+                camera = pg.image.frombuffer(data, (128, 128), 'RGB')
             frame_count = 0
 
         pg.display.update()

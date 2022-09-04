@@ -8,6 +8,7 @@ import json
 from PIL import Image
 import cv2
 import base64
+import numpy as np
 
 bot = Robot()
 app = Flask(__name__)
@@ -32,9 +33,11 @@ def root():
 
 @app.route('/camera')
 def camera():
-    img = cv2.cvtColor(bot.camera_frame, cv2.COLOR_BGR2RGB)
-    img = Image.fromarray(img).resize((128, 128)).tobytes()
-    return base64.b16encode(img)
+    if np.any(bot.camera_frame):
+        img = cv2.cvtColor(bot.camera_frame, cv2.COLOR_BGR2RGB)
+        img = Image.fromarray(img).resize((128, 128)).tobytes()
+        return base64.b16encode(img)
+    return ''
 
 
 @app.route('/trigger_start')

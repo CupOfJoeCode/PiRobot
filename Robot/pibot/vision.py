@@ -99,6 +99,9 @@ class Capture:
         frame = self.get_frame()
 
         min_color, max_color = self.get_target_min_max()
-        mask = cv2.inRange(frame, min_color, max_color)
 
-        return get_target_from_mask(mask), frame, mask
+        if np.any(frame):
+            mask = cv2.inRange(frame, min_color, max_color)
+
+            return get_target_from_mask(mask), frame, mask
+        return None, frame, frame
