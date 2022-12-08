@@ -35,6 +35,7 @@ def main():
         clicked = False
         for e in pg.event.get():
             if e.type == pg.QUIT:
+                requests.get(f'{server}stop')
                 pg.quit()
                 quit()
             elif e.type == pg.KEYDOWN:

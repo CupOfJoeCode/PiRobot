@@ -101,7 +101,7 @@ def start():
         bot.running = True
         robot_thread = Thread(target=bot_main)
         robot_thread.start()
-
+    return ''
 
 if __name__ == '__main__':
     bot.data['Stopped'] = True

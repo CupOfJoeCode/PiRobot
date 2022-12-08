@@ -1,51 +1,35 @@
 from pibot.rpihbridge import RpiHBridge
-# from pibot.vision import *
+from pibot.base.baserobot import BaseRobot
+from pibot.base.command import Command
+
 MOTOR_FREQ = 5000
+DRIVE_SPEED = 1.0
 
+class Robot(BaseRobot):
 
-class Robot:
+    def drive(self, left_speed, right_speed):
+        def set_motors():
+            self.left_motor.set(left_speed)
+            self.right_motor.set(right_speed)
+        def reset_motors():
+            self.leftMotor.stop()
+            self.rightMotor.stop()
+        return Command('Drive').initialize(set_motors).end(reset_motors)
+    
     def __init__(self):
-        self.data = {
-            'speed': 1.0
-        }
-        self.running = False
+        super().__init__()
+        self.left_motor = RpiHBridge(26, 19, pwm_freq=MOTOR_FREQ)
+        self.right_motor = RpiHBridge(13, 12, pwm_freq=MOTOR_FREQ)
 
-        self.leftMotor = RpiHBridge(26, 19, pwm_freq=MOTOR_FREQ)
-        self.rightMotor = RpiHBridge(13, 12, pwm_freq=MOTOR_FREQ)
-
-        self.up = False
-        self.down = False
-        self.left = False
-        self.right = False
+        self.bind('up', self.drive(1.0,1.0))
+        self.bind('down', self.drive(-1.0,-1.0))
+        self.bind('left', self.drive(-1.0,1.0))
+        self.bind('right', self.drive(1.0,-1.0))
 
     def run(self):
-        if self.up:
-            self.leftMotor.set(self.data['speed'])
-            self.rightMotor.set(self.data['speed'])
-        else:
-            self.leftMotor.set(0)
-            self.rightMotor.set(0)
+        super().run()
 
     def stop(self):
+        super().stop()
         self.leftMotor.stop()
         self.rightMotor.stop()
-
-    def trigger_start(self, trigger):
-        if trigger == 'up':
-            self.up = True
-        elif trigger == 'down':
-            self.down = True
-        elif trigger == 'left':
-            self.left = True
-        elif trigger == 'right':
-            self.right = True
-
-    def trigger_end(self, trigger):
-        if trigger == 'up':
-            self.up = False
-        elif trigger == 'down':
-            self.down = False
-        elif trigger == 'left':
-            self.left = False
-        elif trigger == 'right':
-            self.right = False
