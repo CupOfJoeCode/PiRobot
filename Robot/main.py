@@ -1,10 +1,16 @@
-import logging
-from threading import Thread
-from robot import Robot
-from flask import Flask, request
-import sys
-from time import sleep
+import base64
 import json
+import logging
+import sys
+from threading import Thread
+from time import sleep
+
+import cv2
+import numpy as np
+from flask import Flask, request
+from PIL import Image
+
+from robot import Robot
 
 bot = Robot()
 app = Flask(__name__)
@@ -29,10 +35,10 @@ def root():
 
 @app.route('/camera')
 def camera():
-    # if np.any(bot.camera_frame):
-    #     img = cv2.cvtColor(bot.camera_frame, cv2.COLOR_BGR2RGB)
-    #     img = Image.fromarray(img).resize((128, 128)).tobytes()
-    #     return base64.b16encode(img)
+    if np.any(bot.camera_frame):
+        img = cv2.cvtColor(bot.camera_frame, cv2.COLOR_BGR2RGB)
+        img = Image.fromarray(img).resize((128, 128)).tobytes()
+        return base64.b16encode(img)
     return ''
 
 
@@ -73,20 +79,19 @@ def set_color():
     green = int(request.args.get('green'))
     blue = int(request.args.get('blue'))
     threshold = int(request.args.get('threshold'))
-    # bot.vision.set_target_color(red, green, blue, threshold)
+    bot.vision.set_target_color(red, green, blue, threshold)
     return ''
 
 
 @app.route('/get_target')
 def get_target():
-    return ''
-    # if bot.camera_target is None:
-    #     return ''
-    # return json.dumps({
-    #     'x': bot.camera_target.x,
-    #     'y': bot.camera_target.y,
-    #     'radius': bot.camera_target.radius
-    # })
+    if bot.camera_target is None:
+        return ''
+    return json.dumps({
+        'x': bot.camera_target.x,
+        'y': bot.camera_target.y,
+        'radius': bot.camera_target.radius
+    })
 
 
 @app.route('/stop')

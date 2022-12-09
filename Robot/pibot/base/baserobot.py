@@ -1,3 +1,5 @@
+from pibot.vision import Capture
+
 class BaseRobot:
     def __init__(self):
         self.data = {
@@ -7,6 +9,9 @@ class BaseRobot:
         self.triggers = {}
         self.binds = {}
 
+        self.vision = Capture()
+        self.camera_target,self.camera_frame, _ = self.vision.get_target()
+
     def run(self):
         for bind in self.binds:
             if self.triggered(bind):
@@ -15,6 +20,7 @@ class BaseRobot:
             elif self.binds[bind].started:
                 self.binds[bind].stop()
                 self.binds[bind].reset()
+        self.camera_target, self.camera_frame, _ = self.vision.get_target()
 
     def stop(self):
         pass

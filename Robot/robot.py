@@ -1,3 +1,5 @@
+
+
 from pibot.rpihbridge import RpiHBridge
 from pibot.base.baserobot import BaseRobot
 from pibot.base.command import Command
@@ -18,6 +20,7 @@ class Robot(BaseRobot):
     
     def __init__(self):
         super().__init__()
+        
         self.left_motor = RpiHBridge(26, 19, pwm_freq=MOTOR_FREQ)
         self.right_motor = RpiHBridge(13, 12, pwm_freq=MOTOR_FREQ)
 
