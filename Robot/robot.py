@@ -1,11 +1,12 @@
 
 
-from pibot.rpihbridge import RpiHBridge
 from pibot.base.baserobot import BaseRobot
 from pibot.base.command import Command
+# from robotmap import RobotMap
+from basemap import BaseMap
 
-MOTOR_FREQ = 5000
 DRIVE_SPEED = 1.0
+
 
 class Robot(BaseRobot):
 
@@ -13,26 +14,28 @@ class Robot(BaseRobot):
         def set_motors():
             self.left_motor.set(left_speed)
             self.right_motor.set(right_speed)
+
         def reset_motors():
-            self.leftMotor.stop()
-            self.rightMotor.stop()
+            self.left_motor.stop()
+            self.right_motor.stop()
         return Command('Drive').initialize(set_motors).end(reset_motors)
-    
+
     def __init__(self):
         super().__init__()
-        
-        self.left_motor = RpiHBridge(26, 19, pwm_freq=MOTOR_FREQ)
-        self.right_motor = RpiHBridge(13, 12, pwm_freq=MOTOR_FREQ)
+        robot_map = BaseMap()
 
-        self.bind('up', self.drive(1.0,1.0))
-        self.bind('down', self.drive(-1.0,-1.0))
-        self.bind('left', self.drive(-1.0,1.0))
-        self.bind('right', self.drive(1.0,-1.0))
+        self.left_motor = robot_map.get_left_motor()
+        self.right_motor = robot_map.get_right_motor()
+
+        self.bind('up', self.drive(1.0, 1.0))
+        self.bind('down', self.drive(-1.0, -1.0))
+        self.bind('left', self.drive(-1.0, 1.0))
+        self.bind('right', self.drive(1.0, -1.0))
 
     def run(self):
         super().run()
 
     def stop(self):
         super().stop()
-        self.leftMotor.stop()
-        self.rightMotor.stop()
+        self.left_motor.stop()
+        self.right_motor.stop()
