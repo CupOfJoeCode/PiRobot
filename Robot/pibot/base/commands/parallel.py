@@ -30,3 +30,6 @@ class Parallel(Command):
 
         self.initialize(initialize_handler).execute(
             execute_handler).until(until_handler).end(end_handler)
+
+        def __repr__(self):
+            return f'Parallel({self.name}) {self.cmds}'
