@@ -4,13 +4,15 @@ from pibot.base.timer import Timer
 
 class Wait(Command):
 
-    def __init__(self, delay_seconds):
-        super().__init__(f'Wait {delay_seconds}')
-        self.delay = delay_seconds
+    def __init__(self, duration_seconds):
+        super().__init__(f'Wait {duration_seconds}')
+        self.duration = duration_seconds
         self.timer = Timer()
 
-    def initialize_handler(self):
-        self.timer.start()
+        def initialize_handler():
+            self.timer.start()
 
-    def until_handler(self):
-        return self.timer.get_seconds() >= self.delay_seconds
+        def until_handler():
+            return self.timer.get_seconds() >= self.duration
+
+        self.initialize(initialize_handler).until(until_handler)
