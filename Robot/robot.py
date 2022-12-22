@@ -5,7 +5,6 @@ from basemap import BaseMap
 from pibot.base.baserobot import BaseRobot
 from pibot.base.commands.command import Command
 
-
 DRIVE_SPEED = 1.0
 
 
