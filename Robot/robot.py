@@ -4,8 +4,6 @@
 from basemap import BaseMap
 from pibot.base.baserobot import BaseRobot
 from pibot.base.commands.command import Command
-from pibot.base.commands.sequence import Sequence
-from pibot.base.commands.wait import Wait
 
 
 DRIVE_SPEED = 1.0
