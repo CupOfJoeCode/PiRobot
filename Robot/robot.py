@@ -3,9 +3,9 @@
 # from robotmap import RobotMap
 from basemap import BaseMap
 from pibot.base.baserobot import BaseRobot
-from pibot.base.command import Command
-from pibot.base.sequence import Sequence
-from pibot.base.wait import Wait
+from pibot.base.commands.command import Command
+from pibot.base.commands.sequence import Sequence
+from pibot.base.commands.wait import Wait
 
 
 DRIVE_SPEED = 1.0
@@ -30,16 +30,10 @@ class Robot(BaseRobot):
         self.left_motor = robot_map.get_left_motor()
         self.right_motor = robot_map.get_right_motor()
 
-        # self.bind('up', self.drive(1.0, 1.0))
-        # self.bind('down', self.drive(-1.0, -1.0))
-        # self.bind('left', self.drive(-1.0, 1.0))
-        # self.bind('right', self.drive(1.0, -1.0))
-
-        def print_command(message):
-            return Command('Print').initialize(lambda: print(message))
-
-        self.bind('up', Sequence('Test', print_command(
-            'One'), Wait(1), print_command('Two')))
+        self.bind('up', self.drive(1.0, 1.0))
+        self.bind('down', self.drive(-1.0, -1.0))
+        self.bind('left', self.drive(-1.0, 1.0))
+        self.bind('right', self.drive(1.0, -1.0))
 
     def run(self):
         super().run()

@@ -1,4 +1,4 @@
-from pibot.base.command import Command
+from pibot.base.commands.command import Command
 
 
 class Sequence(Command):
