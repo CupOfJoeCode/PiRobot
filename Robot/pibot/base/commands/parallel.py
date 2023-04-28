@@ -2,7 +2,7 @@ from pibot.base.commands.command import Command
 
 
 class Parallel(Command):
-    def __init__(self, name, *cmds):
+    def __init__(self, name, *cmds: Command) -> None:
         super().__init__(name)
         self.cmds = cmds
         self.cmds_running = [False] * len(cmds)
@@ -28,8 +28,9 @@ class Parallel(Command):
                 self.cmds_running[index] = False
                 cmd.end_handler()
 
-        self.initialize(initialize_handler).execute(
-            execute_handler).until(until_handler).end(end_handler)
+        self.initialize(initialize_handler).execute(execute_handler).until(
+            until_handler
+        ).end(end_handler)
 
-        def __repr__(self):
-            return f'Parallel({self.name}) {self.cmds}'
+    def __repr__(self) -> str:
+        return f"Parallel({self.name}) {self.cmds}"

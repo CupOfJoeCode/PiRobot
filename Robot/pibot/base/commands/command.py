@@ -1,5 +1,5 @@
 class Command:
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         self.name = name
         self.initialize_handler = lambda: None
         self.execute_handler = lambda: None
@@ -8,44 +8,45 @@ class Command:
         self.running = True
         self.started = False
 
-    def run(self):
+    def run(self) -> None:
         if not self.running:
             return
         if not self.started:
             self.started = True
-            return self.initialize_handler()
+            self.initialize_handler()
+            return
         self.execute_handler()
         if self.until_handler():
             self.end_handler()
             self.running = False
 
-    def reset(self):
+    def reset(self) -> None:
         self.running = True
         self.started = False
 
-    def stop(self):
+    def stop(self) -> None:
         self.running = False
         self.end_handler()
 
-    def initialize(self, handler):
+    def initialize(self, handler: callable) -> None:
         self.initialize_handler = handler
         return self
 
-    def execute(self, handler):
+    def execute(self, handler: callable):
         self.execute_handler = handler
         return self
 
-    def until(self, handler):
+    def until(self, handler: callable):
         self.until_handler = handler
         return self
 
-    def end(self, handler):
+    def end(self, handler: callable):
         self.end_handler = handler
         return self
 
-    def with_name(self, name):
+    def with_name(self, name: str):
         self.name = name
         return self
 
-    def __repr__(self):
-        return f'Command({self.name})'
+    def __repr__(self) -> str:
+        return f"Command({self.name})"

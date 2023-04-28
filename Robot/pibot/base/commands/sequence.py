@@ -2,7 +2,7 @@ from pibot.base.commands.command import Command
 
 
 class Sequence(Command):
-    def __init__(self, name, *cmds):
+    def __init__(self, name, *cmds: Command) -> None:
         super().__init__(name)
         self.cmds = cmds
         self.cmd_index = 0
@@ -28,8 +28,9 @@ class Sequence(Command):
                 self.cmds[self.cmd_index].end_handler()
             self.cmd_index = -1
 
-        self.initialize(initialize_handler).execute(
-            execute_handler).until(until_handler).end(end_handler)
+        self.initialize(initialize_handler).execute(execute_handler).until(
+            until_handler
+        ).end(end_handler)
 
-        def __repr__(self):
-            return f'Sequence({self.name}) {self.cmds}'
+    def __repr__(self) -> str:
+        return f"Sequence({self.name}) {self.cmds}"

@@ -3,9 +3,8 @@ from pibot.base.timer import Timer
 
 
 class Wait(Command):
-
-    def __init__(self, duration_seconds):
-        super().__init__(f'Wait {duration_seconds}')
+    def __init__(self, duration_seconds: float) -> None:
+        super().__init__(f"Wait {duration_seconds}")
         self.duration = duration_seconds
         self.timer = Timer()
 

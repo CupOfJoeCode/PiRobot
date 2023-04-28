@@ -1,6 +1,6 @@
 class DigitalInput:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def get(self):
+    def get(self) -> bool:
         return False
