@@ -14,6 +14,10 @@ class PrintCommand(Command):
         ----------
         message : str
             The message to be print
+
+        Returns
+        -------
+        None
         """
         super().__init__("Print")
 

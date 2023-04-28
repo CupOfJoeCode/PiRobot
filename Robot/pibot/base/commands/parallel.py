@@ -21,6 +21,10 @@ class Parallel(Command):
             The name of the command
         *cmds : Command
             A sequence of commands to be run in parallel
+
+        Returns
+        -------
+        None
         """
         super().__init__(name)
         self.cmds = cmds
@@ -52,5 +56,11 @@ class Parallel(Command):
         ).end(end_handler)
 
     def __repr__(self) -> str:
-        """Returns a string representation of the command"""
+        """Returns a string representation of the command
+
+        Returns
+        -------
+        repr : str
+            A string representation of the command
+        """
         return f"Parallel({self.name}) {self.cmds}"

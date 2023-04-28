@@ -15,7 +15,7 @@ class Command:
         the name of the command
     running : bool
         whether or not the command is currently running
-    started: bool
+    started : bool
         whether or not the command has been started
 
     Methods
@@ -48,6 +48,10 @@ class Command:
         ----------
         name : str
             The name of the command
+
+        Returns
+        -------
+        None
         """
         self.name = name
         self.initialize_handler = lambda: None
@@ -58,7 +62,12 @@ class Command:
         self.started = False
 
     def run(self) -> None:
-        """Runs the command and calls one of the four handlers"""
+        """Runs the command and calls one of the four handlers
+
+        Returns
+        -------
+        None
+        """
         if not self.running:
             return
         if not self.started:
@@ -71,12 +80,22 @@ class Command:
             self.running = False
 
     def reset(self) -> None:
-        """Resets the command"""
+        """Resets the command
+
+        Returns
+        -------
+        None
+        """
         self.running = True
         self.started = False
 
     def stop(self) -> None:
-        """Stops execution of the command"""
+        """Stops execution of the command
+
+        Returns
+        -------
+        None
+        """
         self.running = False
         self.end_handler()
 
@@ -87,6 +106,11 @@ class Command:
         ----------
         handler : callable
             The function to be called when the command is first run
+
+        Returns
+        -------
+        self : Command
+            The command for function chaining
         """
         self.initialize_handler = handler
         return self
@@ -98,6 +122,11 @@ class Command:
         ----------
         handler : callable
             The function to be called when the command is executing
+
+        Returns
+        -------
+        self : Command
+            The command for function chaining
         """
         self.execute_handler = handler
         return self
@@ -109,6 +138,11 @@ class Command:
         ----------
         handler : callable
             The function that returns True if the interrupting condition is met
+
+        Returns
+        -------
+        self : Command
+            The command for function chaining
         """
         self.until_handler = handler
         return self
@@ -120,6 +154,11 @@ class Command:
         ----------
         handler : callable
             The function to be called when the command ends
+
+        Returns
+        -------
+        self : Command
+            The command for function chaining
         """
         self.end_handler = handler
         return self
@@ -131,10 +170,21 @@ class Command:
         ----------
         name : str
             The name of the command
+
+        Returns
+        -------
+        self : Command
+            The command for function chaining
         """
         self.name = name
         return self
 
     def __repr__(self) -> str:
-        """Returns a string representation of the command"""
+        """Returns a string representation of the command
+
+        Returns
+        -------
+        repr : str
+            A string representation of the command
+        """
         return f"Command({self.name})"

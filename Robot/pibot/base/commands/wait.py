@@ -16,6 +16,10 @@ class Wait(Command):
         ----------
         duration : Time
             How long the command will run for before ending
+
+        Returns
+        -------
+        None
         """
         super().__init__(f"Wait {round(duration.get_seconds(),2)}")
         self.duration = duration.get_seconds()
