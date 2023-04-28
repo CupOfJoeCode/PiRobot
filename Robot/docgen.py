@@ -21,6 +21,21 @@ for filename in all_files:
         pass
 
 
+def doc_to_md(doc, level="##"):
+    out = ""
+    for line in doc.split("\n"):
+        if line.strip().startswith("-"):
+            last_line = out.split("\n")[-2]
+            out = "\n".join(out.split("\n")[:-2])
+            out += f"\n\n{level} {last_line}\n\n"
+        else:
+            if ":" in line or "(" in line:
+                out += f"- `{line.strip()}`\\\n"
+            elif line:
+                out += f"{line.strip()}\n"
+    return out
+
+
 for c in classes:
     dcstr = ""
     full = classes[c]
@@ -28,16 +43,13 @@ for c in classes:
 
     if full.__doc__ is not None:
         dcstr += f"# {c}\n\n"
-        for line in full.__doc__.split("\n"):
-            if line.strip().startswith("-"):
-                last_line = dcstr.split("\n")[-2]
-                dcstr = "\n".join(dcstr.split("\n")[:-2])
-                dcstr += f"\n\n## {last_line}\n\n"
-            else:
-                if ":" in line or "(" in line:
-                    dcstr += f"- `{line.strip()}`\\\n"
-                elif line:
-                    dcstr += f"{line.strip()}\n"
+        dcstr += doc_to_md(full.__doc__)
+
+        for at in attrs:
+            if (not at.startswith("_")) or ("__init__" in at):
+                escaped = at.replace("_", "\\_")
+                dcstr += f"## {escaped}\n\n"
+                dcstr += doc_to_md(getattr(full, at).__doc__, "")
 
         with open(f"docs/{c}.md", "w") as fp:
             fp.write(dcstr[:-1])
