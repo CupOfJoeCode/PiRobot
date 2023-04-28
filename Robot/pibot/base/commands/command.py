@@ -1,11 +1,11 @@
 class Command:
     """
     An object representing an action. A command runs when scheduled and is interrupted when its condidiont is met.
-    A command consists of four functions: `initialize`, `execute`, `until`, and `end`.
-    `initialize` runs when the command first starts
-    `execute` runs repeatedly until the command stops running
-    `until` returns a condition that will interrupt the command when true
-    `end` runs when the command ends or is interrupted
+    A command consists of four functions - initialize, execute, until, and end.
+    initialize runs when the command first starts
+    execute runs repeatedly until the command stops running
+    until returns a condition that will interrupt the command when true
+    end runs when the command ends or is interrupted
 
     ...
 

@@ -1,6 +1,6 @@
 class PID:
     """
-    A basic PID controller where
+    A basic PID controller
 
     ...
 

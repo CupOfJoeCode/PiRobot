@@ -7,7 +7,7 @@ class LowPassFilter:
     Attributes
     ----------
     cutoff : float
-        the cutoff of the filter in the range [0.0,1.0] (fully closed to fully open)
+        the cutoff of the filter in the range [0.0,1.0] from fully closed to fully open
 
     Methods
     -------
@@ -27,7 +27,7 @@ class LowPassFilter:
         Parameters
         ----------
         cutoff : float
-            the cutoff of the filter in the range [0.0,1.0] (fully closed to fully open)
+            the cutoff of the filter in the range [0.0,1.0] from fully closed to fully open
         poles : int, optional
             the number of poles of the filter
 
@@ -44,7 +44,7 @@ class LowPassFilter:
         Parameters
         ----------
         cutoff : float
-            the cutoff of the filter in the range [0.0,1.0] (fully closed to fully open)
+            the cutoff of the filter in the range [0.0,1.0] from fully closed to fully open
 
         Returns
         -------
