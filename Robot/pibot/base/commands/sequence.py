@@ -2,7 +2,26 @@ from pibot.base.commands.command import Command
 
 
 class Sequence(Command):
+    """
+    A command that contains a list of commands that run sequentially one after the other.
+    Inherits from `Command`
+
+    Methods
+    -------
+    __repr__()
+        Returns a string representation of the command
+    """
+
     def __init__(self, name, *cmds: Command) -> None:
+        """Creates a sequence command
+
+        Parameters
+        ----------
+        name : str
+            The name of the command
+        *cmds : Command
+            A sequence of commands to be run sequentially
+        """
         super().__init__(name)
         self.cmds = cmds
         self.cmd_index = 0
@@ -33,4 +52,5 @@ class Sequence(Command):
         ).end(end_handler)
 
     def __repr__(self) -> str:
+        """Returns a string representation of the command"""
         return f"Sequence({self.name}) {self.cmds}"

@@ -1,4 +1,5 @@
 import time
+from pibot.base.units import Time
 
 
 class Timer:
@@ -8,5 +9,5 @@ class Timer:
     def start(self) -> None:
         self.initial_time = time.time()
 
-    def get_seconds(self) -> float:
-        return time.time() - self.initial_time
+    def get_time(self) -> Time:
+        return Time.from_seconds(time.time() - self.initial_time)

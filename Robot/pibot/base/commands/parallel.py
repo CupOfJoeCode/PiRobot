@@ -2,7 +2,26 @@ from pibot.base.commands.command import Command
 
 
 class Parallel(Command):
+    """
+    A command that contains a list of commands that all run at the same time in parallel.
+    Inherits from `Command`
+
+    Methods
+    -------
+    __repr__()
+        Returns a string representation of the command
+    """
+
     def __init__(self, name, *cmds: Command) -> None:
+        """Creates a parallel command
+
+        Parameters
+        ----------
+        name : str
+            The name of the command
+        *cmds : Command
+            A sequence of commands to be run in parallel
+        """
         super().__init__(name)
         self.cmds = cmds
         self.cmds_running = [False] * len(cmds)
@@ -33,4 +52,5 @@ class Parallel(Command):
         ).end(end_handler)
 
     def __repr__(self) -> str:
+        """Returns a string representation of the command"""
         return f"Parallel({self.name}) {self.cmds}"
