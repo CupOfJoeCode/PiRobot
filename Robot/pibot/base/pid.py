@@ -19,16 +19,16 @@ class PID:
         Calculate the output based on an input error
     """
 
-    def __init__(self, kP: float, kI: float, kD: float) -> None:
+    def __init__(self, kP: float = 0.0, kI: float = 0.0, kD: float = 0.0) -> None:
         """Construct a PID controller
 
         Parameters
         ----------
-        kP : float
+        kP : float, optional
             the proportional coefficient
-        kI : float
+        kI : float, optional
             the integral coefficient
-        kD : float
+        kD : float, optional
             the derivative coefficient
 
         Returns

@@ -28,7 +28,7 @@ class LowPassFilter:
         ----------
         cutoff : float
             the cutoff of the filter in the range [0.0,1.0] (fully closed to fully open)
-        poles : int
+        poles : int, optional
             the number of poles of the filter
 
         Returns
