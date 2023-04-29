@@ -39,19 +39,19 @@ class Distance:
         return Distance(thou / Distance(1).get_thou())
 
     def __init__(self, meters: float):
-        self.meters = meters
+        self._meters = meters
 
     def get_meters(self) -> float:
-        return self.meters
+        return self._meters
 
     def get_centimeters(self) -> float:
-        return self.meters * 100.0
+        return self._meters * 100.0
 
     def get_millimeters(self) -> float:
-        return self.meters * 1000.0
+        return self._meters * 1000.0
 
     def get_kilometers(self) -> float:
-        return self.meters / 1000.0
+        return self._meters / 1000.0
 
     def get_inches(self) -> float:
         return self.get_centimeters() / 2.54
@@ -83,13 +83,13 @@ class Angle:
         return Angle(rotations / Angle(1).get_rotations())
 
     def __init__(self, radians: float):
-        self.radians = radians
+        self._radians = radians
 
     def get_radians(self) -> float:
-        return self.radians
+        return self._radians
 
     def get_degrees(self) -> float:
-        return math.degrees(self.radians)
+        return math.degrees(self._radians)
 
     def get_rotations(self) -> float:
         return self.get_degrees() / 360.0
@@ -129,13 +129,13 @@ class Time:
         return Time(microseconds / Time(1).get_microseconds())
 
     def __init__(self, seconds: float):
-        self.seconds = seconds
+        self._seconds = seconds
 
     def get_seconds(self) -> float:
-        return self.seconds
+        return self._seconds
 
     def get_minutes(self) -> float:
-        return self.seconds / 60.0
+        return self._seconds / 60.0
 
     def get_hours(self) -> float:
         return self.get_minutes() / 60.0
@@ -150,10 +150,10 @@ class Time:
         return self.get_days() / 365.0
 
     def get_milliseconds(self) -> float:
-        return self.seconds * 1000
+        return self._seconds * 1000
 
     def get_microseconds(self) -> float:
-        return self.seconds * 1000000
+        return self._seconds * 1000000
 
 
 class Temperature:
@@ -169,15 +169,14 @@ class Temperature:
     def from_fahrenheit(self, fahrenheit: float):
         return Temperature.from_celcius((fahrenheit - 32) / 1.8)
 
-    # kelvin, celcius, fahrenheit
     def __init__(self, kelvin: float):
-        self.kelvin = kelvin
+        self._kelvin = kelvin
 
     def get_kelvin(self) -> float:
-        return self.kelvin
+        return self._kelvin
 
     def get_celcius(self) -> float:
-        return self.kelvin - 273.15
+        return self._kelvin - 273.15
 
     def get_fahrenheit(self) -> float:
         return (self.get_celcius() * 1.8) + 32.0
@@ -215,16 +214,16 @@ class Mass:
         return Mass(tons / Mass(1).get_tons())
 
     def __init__(self, grams: float):
-        self.grams = grams
+        self._grams = grams
 
     def get_grams(self) -> float:
-        return self.grams
+        return self._grams
 
     def get_kilograms(self) -> float:
-        return self.grams / 1000.0
+        return self._grams / 1000.0
 
     def get_milligrams(self) -> float:
-        return self.grams * 1000.0
+        return self._grams * 1000.0
 
     def get_metric_tons(self) -> float:
         return self.get_kilograms() / 1000.0

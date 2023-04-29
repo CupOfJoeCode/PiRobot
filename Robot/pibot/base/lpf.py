@@ -35,8 +35,8 @@ class LowPassFilter:
         -------
         None
         """
-        self.buffers = [0] * poles
-        self.cutoff = min(1.0, max(0.0, cutoff))
+        self._buffers = [0] * poles
+        self._cutoff = min(1.0, max(0.0, cutoff))
 
     def set_cutoff(self, cutoff: float) -> None:
         """Set the cutoff of the filter
@@ -50,7 +50,7 @@ class LowPassFilter:
         -------
         None
         """
-        self.cutoff = min(1.0, max(0.0, cutoff))
+        self._cutoff = min(1.0, max(0.0, cutoff))
 
     def get_cutoff(self) -> float:
         """Get the filter's current cutoff
@@ -60,7 +60,7 @@ class LowPassFilter:
         cutoff : float
             The cutoff of the filter
         """
-        return self.cutoff
+        return self._cutoff
 
     def calculate(self, sample: float) -> float:
         """Calculate the filter's output based on an input sample
@@ -75,11 +75,11 @@ class LowPassFilter:
         output : float
             The output of the last filter pole
         """
-        for index, buf in enumerate(self.buffers):
+        for index, buf in enumerate(self._buffers):
             if index == 0:
                 prev_buf = sample
             else:
-                prev_buf = self.buffers[index - 1]
+                prev_buf = self._buffers[index - 1]
 
-            self.buffers[index] += self.cutoff * (prev_buf - buf)
-        return self.buffers[-1]
+            self._buffers[index] += self._cutoff * (prev_buf - buf)
+        return self._buffers[-1]

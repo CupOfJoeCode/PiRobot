@@ -39,8 +39,8 @@ class PID:
         self.kI = kI
         self.kD = kD
 
-        self.prev_error = 0.0
-        self.total_error = 0.0
+        self._prev_error = 0.0
+        self._total_error = 0.0
 
     def calculate(self, error: float) -> float:
         """Construct a PID controller
@@ -61,9 +61,9 @@ class PID:
         """
         output = (
             (self.kP * error)
-            + (self.kI * self.total_error)
-            + (self.kD * (error - self.prev_error))
+            + (self.kI * self._total_error)
+            + (self.kD * (error - self._prev_error))
         )
-        self.prev_error = error
-        self.total_error += error
+        self._prev_error = error
+        self._total_error += error
         return output

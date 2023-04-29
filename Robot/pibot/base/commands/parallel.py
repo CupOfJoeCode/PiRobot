@@ -27,29 +27,29 @@ class Parallel(Command):
         None
         """
         super().__init__(name)
-        self.cmds = cmds
-        self.cmds_running = [False] * len(cmds)
+        self._cmds = cmds
+        self._cmds_running = [False] * len(cmds)
 
         def initialize_handler():
-            for index, cmd in enumerate(self.cmds):
-                cmd.initialize_handler()
-                self.cmds_running[index] = True
+            for index, cmd in enumerate(self._cmds):
+                cmd._initialize_handler()
+                self._cmds_running[index] = True
 
         def execute_handler():
-            for index, cmd in enumerate(self.cmds):
-                if self.cmds_running[index]:
-                    cmd.execute_handler()
-                    if cmd.until_handler():
-                        cmd.end_handler()
-                        self.cmds_running[index] = False
+            for index, cmd in enumerate(self._cmds):
+                if self._cmds_running[index]:
+                    cmd._execute_handler()
+                    if cmd._until_handler():
+                        cmd._end_handler()
+                        self._cmds_running[index] = False
 
         def until_handler():
-            return True not in self.cmds_running
+            return True not in self._cmds_running
 
         def end_handler():
-            for index, cmd in enumerate(self.cmds):
-                self.cmds_running[index] = False
-                cmd.end_handler()
+            for index, cmd in enumerate(self._cmds):
+                self._cmds_running[index] = False
+                cmd._end_handler()
 
         self.initialize(initialize_handler).execute(execute_handler).until(
             until_handler
@@ -63,4 +63,4 @@ class Parallel(Command):
         repr : str
             A string representation of the command
         """
-        return f"Parallel({self.name}) {self.cmds}"
+        return f"Parallel({self.name}) {self._cmds}"

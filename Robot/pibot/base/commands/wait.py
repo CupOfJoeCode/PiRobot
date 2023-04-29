@@ -22,13 +22,13 @@ class Wait(Command):
         None
         """
         super().__init__(f"Wait {round(duration.get_seconds(),2)}")
-        self.duration = duration.get_seconds()
-        self.timer = Timer()
+        self._duration = duration.get_seconds()
+        self._timer = Timer()
 
         def initialize_handler():
-            self.timer.start()
+            self._timer.start()
 
         def until_handler():
-            return self.timer.get_time().get_seconds() >= self.duration
+            return self._timer.get_time().get_seconds() >= self._duration
 
         self.initialize(initialize_handler).until(until_handler)

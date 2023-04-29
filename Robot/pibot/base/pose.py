@@ -10,17 +10,17 @@ class Pose2d:
         y: Distance = Distance(0),
         rotation: Rotation2d = Rotation2d(),
     ) -> None:
-        self.position = Vector(x.get_meters(), y.get_meters())
-        self.rotation = rotation
+        self._position = Vector(x.get_meters(), y.get_meters())
+        self._rotation = rotation
 
     def get_x(self) -> Distance:
-        return Distance.from_meters(self.position.x)
+        return Distance.from_meters(self._position.x)
 
     def get_y_meters(self) -> Distance:
-        return Distance.from_meters(self.position.y)
+        return Distance.from_meters(self._position.y)
 
     def get_rotation(self) -> Rotation2d:
-        return self.rotation
+        return self._rotation
 
 
 class Pose3d:
@@ -31,20 +31,20 @@ class Pose3d:
         z: Distance = Distance(0),
         rotation: Rotation3d = Rotation3d(),
     ) -> None:
-        self.position = Vector(x.get_meters(), y.get_meters(), z.get_meters())
-        self.rotation = rotation
+        self._position = Vector(x.get_meters(), y.get_meters(), z.get_meters())
+        self._rotation = rotation
 
     def get_x(self) -> Distance:
-        return Distance.from_meters(self.position.x)
+        return Distance.from_meters(self._position.x)
 
     def get_y(self) -> Distance:
-        return Distance.from_meters(self.position.y)
+        return Distance.from_meters(self._position.y)
 
     def get_z(self) -> Distance:
-        return Distance.from_meters(self.position.z)
+        return Distance.from_meters(self._position.z)
 
     def get_rotation(self) -> Rotation3d:
-        return self.rotation
+        return self._rotation
 
     def to_pose2d(self) -> Pose2d:
-        return Pose2d(self.get_x(), self.get_y(), self.rotation.get_z())
+        return Pose2d(self.get_x(), self.get_y(), self._rotation.get_z())

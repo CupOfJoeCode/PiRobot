@@ -54,10 +54,10 @@ class Command:
         None
         """
         self.name = name
-        self.initialize_handler = lambda: None
-        self.execute_handler = lambda: None
-        self.until_handler = lambda: True
-        self.end_handler = lambda: None
+        self._initialize_handler = lambda: None
+        self._execute_handler = lambda: None
+        self._until_handler = lambda: True
+        self._end_handler = lambda: None
         self.running = True
         self.started = False
 
@@ -72,11 +72,11 @@ class Command:
             return
         if not self.started:
             self.started = True
-            self.initialize_handler()
+            self._initialize_handler()
             return
-        self.execute_handler()
-        if self.until_handler():
-            self.end_handler()
+        self._execute_handler()
+        if self._until_handler():
+            self._end_handler()
             self.running = False
 
     def reset(self) -> None:
@@ -97,7 +97,7 @@ class Command:
         None
         """
         self.running = False
-        self.end_handler()
+        self._end_handler()
 
     def initialize(self, handler: callable) -> None:
         """Sets the initialize handler and returns the command for function chaining
@@ -112,7 +112,7 @@ class Command:
         self : Command
             The command for function chaining
         """
-        self.initialize_handler = handler
+        self._initialize_handler = handler
         return self
 
     def execute(self, handler: callable):
@@ -128,7 +128,7 @@ class Command:
         self : Command
             The command for function chaining
         """
-        self.execute_handler = handler
+        self._execute_handler = handler
         return self
 
     def until(self, handler: callable):
@@ -144,7 +144,7 @@ class Command:
         self : Command
             The command for function chaining
         """
-        self.until_handler = handler
+        self._until_handler = handler
         return self
 
     def end(self, handler: callable):
@@ -160,7 +160,7 @@ class Command:
         self : Command
             The command for function chaining
         """
-        self.end_handler = handler
+        self._end_handler = handler
         return self
 
     def with_name(self, name: str):
