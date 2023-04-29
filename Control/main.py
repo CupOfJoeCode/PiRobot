@@ -1,96 +1,178 @@
-import base64
 import pygame as pg
-import requests
 import sys
+from font import Font
+import requests
 import json
-from widget import DataWidget
 import easygui
-import pygame.gfxdraw
+from vecmath import Vector, Rotation2d, Rotation3d
 
 
 def main():
-    key_codes = {
-        pg.K_UP: "up",
-        pg.K_DOWN: "down",
-        pg.K_LEFT: "left",
-        pg.K_RIGHT: "right",
-        pg.K_SPACE: "action",
-    }
+    SERVER = sys.argv[1]
+    PORT = sys.argv[2]
+    URL = f"http://{SERVER}:{PORT}"
 
     pg.init()
-    pg.display.set_caption("PiRobot Controller")
-    pg.display.set_icon(pg.image.load("icon.png"))
-    d = pg.display.set_mode((800, 600))
-    ip = sys.argv[1]
-    port = sys.argv[2]
-    server = f"http://{ip}:{port}/"
+    d = pg.display.set_mode((800, 600), pg.RESIZABLE)
+    font = Font()
+    pose2d_x = 0
+    pose2d_y = 0
+    pose2d_ppm = 50
 
-    frame_count = 0
+    robot_corners = [
+        Vector(-1, -1) * 0.5,
+        Vector(1, -1) * 0.5,
+        Vector(1, 1) * 0.5,
+        Vector(-1, 1) * 0.5,
+    ]
+
+    pose2d_name = ""
     while True:
-        clicked = False
+        mouse_x, mouse_y = pg.mouse.get_pos()
+        rel_x, rel_y = pg.mouse.get_rel()
+        mouses = pg.mouse.get_pressed()
+        mouse_down = mouses[0]
+        mouse_right = mouses[2]
+        scroll_dir = 0
+
         for e in pg.event.get():
             if e.type == pg.QUIT:
-                requests.get(f"{server}stop")
+                requests.get(f"{URL}/stop")
                 pg.quit()
-                quit()
+                sys.exit(0)
+            elif e.type == pg.VIDEORESIZE:
+                d = pg.display.set_mode(e.size, pg.RESIZABLE)
             elif e.type == pg.KEYDOWN:
-                if e.key == pg.K_RETURN:
-                    requests.get(f"{server}stop")
-                elif e.key == pg.K_BACKSLASH:
-                    requests.get(f"{server}start")
-                elif e.key in key_codes:
-                    requests.get(f"{server}trigger_start?trigger={key_codes[e.key]}")
-
-            elif e.type == pg.KEYUP:
-                if e.key in key_codes:
-                    requests.get(f"{server}trigger_end?trigger={key_codes[e.key]}")
-
+                if e.key == pg.K_BACKSLASH:
+                    requests.get(f"{URL}/start")
+                elif e.key == pg.K_RETURN:
+                    requests.get(f"{URL}/stop")
             elif e.type == pg.MOUSEBUTTONDOWN:
-                if e.button == 1:
-                    clicked = True
-        robot_data = json.loads(requests.get(f"{server}get_data").text)
-        mouse_x, mouse_y = pg.mouse.get_pos()
-        d.fill((0, 0, 0))
+                if e.button == 4:
+                    scroll_dir = -1
+                elif e.button == 5:
+                    scroll_dir = 1
 
-        x_pos = 0
-        y_pos = 0
+        table = json.loads(requests.get(f"{URL}/get_data").text)
 
-        for key in robot_data:
-            widget = DataWidget()
-            widget.set_title(key)
-            widget.entry_type = robot_data[key]["type"]
-            widget.set_value(robot_data[key]["value"], widget.entry_type)
+        d.fill((60,) * 3)
+        window_size = (d.get_width() // 2, (d.get_height() - 32) // 2)
 
-            widget_x = x_pos * 140 + 10
-            widget_y = y_pos * 140 + 10
+        table_surf = pg.Surface(window_size, pg.SRCALPHA)
+        table_surf.fill((0,) * 4)
+        pose2d_surf = pg.Surface(window_size, pg.SRCALPHA)
+        pose2d_surf.fill((0,) * 4)
 
-            d.blit(widget.get_surface(), (widget_x, widget_y))
+        if mouse_x < window_size[0] and mouse_y > 32 + window_size[1]:
+            if mouse_down:
+                pose2d_x -= rel_x / pose2d_ppm
+                pose2d_y += rel_y / pose2d_ppm
+            if scroll_dir == 1:
+                pose2d_ppm /= 1.1
+            elif scroll_dir == -1:
+                pose2d_ppm *= 1.1
+            if mouse_right:
+                name = easygui.enterbox(
+                    "Pose Entry Key", "Pose Entry", default=pose2d_name
+                )
+                if name is not None:
+                    pose2d_name = name
 
-            if clicked:
-                if mouse_x in range(widget_x, widget_x + 128):
-                    if mouse_y in range(widget_y, widget_y + 128):
-                        if widget.isbool:
-                            requests.get(
-                                f"{server}set_data?key={key}&value={not robot_data[key]}"
-                            )
-                        else:
-                            new_val = easygui.enterbox(
-                                key, "Set Value", robot_data[key]
-                            )
-                            if new_val is not None:
-                                requests.get(
-                                    f"{server}set_data?key={key}&value={new_val}"
-                                )
+        def pose2d_translate(vec):
+            screen_x = window_size[0] // 2 - int((pose2d_x - vec.x) * pose2d_ppm)
+            screen_y = window_size[1] // 2 + int((pose2d_y - vec.y) * pose2d_ppm)
+            return (screen_x, screen_y)
 
-            x_pos += 1
-            if x_pos > 5:
-                x_pos = 0
-                y_pos += 1
+        origin = pose2d_translate(Vector(0, 0))
 
-        frame_count += 1
+        pg.draw.rect(
+            pose2d_surf,
+            (200, 60, 60),
+            (0, origin[1], window_size[0], 1),
+        )
+
+        pg.draw.rect(
+            pose2d_surf,
+            (60, 200, 60),
+            (origin[0], 0, 1, window_size[1]),
+        )
+
+        rot = Rotation2d(0)
+        robot_pos = Vector()
+
+        if f"{pose2d_name}.x" in table:
+            robot_pos = Vector(
+                float(table[f"{pose2d_name}.x"]["value"]),
+                float(table[f"{pose2d_name}.y"]["value"]),
+            )
+            rot = Rotation2d(float(table[f"{pose2d_name}.angle"]["value"]))
+
+        new_corner = [robot_pos + rot.rotate(v) for v in robot_corners]
+
+        pointer = robot_pos + rot.rotate(Vector(1, 0))
+
+        pg.draw.polygon(
+            pose2d_surf,
+            (60, 60, 200),
+            [
+                pose2d_translate(new_corner[0]),
+                pose2d_translate(new_corner[1]),
+                pose2d_translate(new_corner[2]),
+            ],
+        )
+
+        pg.draw.polygon(
+            pose2d_surf,
+            (60, 60, 200),
+            [
+                pose2d_translate(new_corner[3]),
+                pose2d_translate(new_corner[2]),
+                pose2d_translate(new_corner[0]),
+            ],
+        )
+
+        pg.draw.line(
+            pose2d_surf,
+            (60, 200, 60),
+            pose2d_translate(robot_pos),
+            pose2d_translate(pointer),
+            1,
+        )
+
+        pose2d_surf.blit(font.render(pose2d_name), (4, 4))
+
+        scr_y = 4
+        for key in table:
+            entry = table[key]
+            if entry["type"] == 0:
+                val = float(entry["value"])
+                table_surf.blit(font.render(f"{key}: {round(val,2)}"), (4, scr_y))
+            elif entry["type"] == 1:
+                keysurf = font.render(key)
+                val = entry["value"] == "1"
+                bg = pg.Surface(keysurf.get_size())
+                bg.fill((200, 60, 60) if val else (60, 0, 0))
+                bg.blit(keysurf, (0, 0))
+                table_surf.blit(bg, (4, scr_y))
+            elif entry["type"] == 0:
+                val = entry["value"]
+                table_surf.blit(font.render(f"{key}: {val}"), (4, scr_y))
+
+            scr_y += 24
+        d.blit(table_surf, (0, 32))
+        d.blit(pose2d_surf, (0, 32 + window_size[1]))
+
+        pg.draw.rect(d, (0,) * 3, (window_size[0], 32, 1, window_size[1] * 2))
+        pg.draw.rect(d, (0,) * 3, (0, window_size[1] + 32, window_size[0] * 2, 1))
+
+        if "Stopped" in table:
+            val = table["Stopped"]["value"] == "1"
+            pg.draw.rect(
+                d, (200, 60, 60) if val else (60, 0, 0), (0, 0, d.get_width(), 32)
+            )
+            d.blit(font.render("Stopped" if val else "Running"), (8, 8))
 
         pg.display.update()
-        pg.time.wait(1)
 
 
 if __name__ == "__main__":

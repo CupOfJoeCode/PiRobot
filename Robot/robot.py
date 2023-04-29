@@ -1,7 +1,9 @@
 # from robotmap import RobotMap
 from basemap import BaseMap
 from pibot.base.baserobot import BaseRobot
-from pibot.base.commands.command import Command
+from pibot.base.pose import Pose2d, Pose3d
+from pibot.base.units import Distance, Angle
+from pibot.base.rotation import Rotation2d
 
 DRIVE_SPEED = 1.0
 
@@ -10,9 +12,14 @@ class Robot(BaseRobot):
     def __init__(self) -> None:
         super().__init__()
         robot_map = BaseMap()
-        self.data.put_text("Hello", "World")
-        self.data.put_boolean("bol", True)
-        self.data.put_number("num", 3.1415926)
+
+        pose_test = Pose2d(
+            Distance.from_meters(1),
+            Distance.from_meters(-0.5),
+            Rotation2d(Angle.from_degrees(45)),
+        )
+
+        self.data.put_pose2d("pose", pose_test)
 
         self.left_motor = robot_map.get_left_motor()
         self.right_motor = robot_map.get_right_motor()
