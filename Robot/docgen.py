@@ -46,10 +46,11 @@ for c in classes:
         dcstr += doc_to_md(full.__doc__)
 
         for at in attrs:
-            if (not at.startswith("_")) or ("__init__" in at):
-                escaped = at.replace("_", "\\_")
-                dcstr += f"## {escaped}\n\n"
-                dcstr += doc_to_md(getattr(full, at).__doc__, "")
+            if getattr(full, at).__doc__ is not None:
+                if (not at.startswith("_")) or ("__init__" in at):
+                    escaped = at.replace("_", "\\_")
+                    dcstr += f"## {escaped}\n\n"
+                    dcstr += doc_to_md(getattr(full, at).__doc__, "")
 
         with open(f"docs/{c}.md", "w") as fp:
             fp.write(dcstr[:-1])
