@@ -29,8 +29,8 @@ class RpiPWMOutput(PWMOutput):
         """
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pin, GPIO.OUT)
-        self.pwm = GPIO.PWM(pin, freq)
-        self.pwm.start(0)
+        self._pwm = GPIO.PWM(pin, freq)
+        self._pwm.start(0)
 
     def set(self, width: float) -> None:
         """Set the pulse width of the output
@@ -44,4 +44,4 @@ class RpiPWMOutput(PWMOutput):
         -------
         None
         """
-        self.pwm.ChangeDutyCycle(min(100, max(0, int(width * 100))))
+        self._pwm.ChangeDutyCycle(min(100, max(0, int(width * 100))))

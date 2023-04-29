@@ -6,18 +6,47 @@ from pibot.base.units import Time, Distance
 
 
 class RpiUltraSonic(DistanceSensor):
+    """
+    An ultrasonic distance sensor connected to the Raspberry Pi
+
+    Methods
+    -------
+    get_distance()
+        Get the distance to an object
+    """
+
     def __init__(self, trig_pin: int, echo_pin: int) -> None:
+        """Create a Raspberry Pi ultrasonic distance sensor
+
+        Parameters
+        ----------
+        trig_pin : int
+            The trigger output pin of the sensor using the BCM pin number
+        echo_pin : int
+            The echo input pin of the sensor using the BCM pin number
+
+        Returns
+        -------
+        None
+        """
         super().__init__()
-        self.trigger = RpiOutput(trig_pin)
-        self.echo = RpiInput(echo_pin)
-        self.timer = Timer()
+        self._trigger = RpiOutput(trig_pin)
+        self._echo = RpiInput(echo_pin)
+        self._timer = Timer()
 
     def get_distance(self) -> Distance:
-        self.timer.start()
-        self.trigger.pulse()
-        while (not self.echo.get()) and (self.timer.get_time().get_seconds() < 0.1):
+        """Get the distance to an object
+
+        Returns
+        -------
+        distance : Distance
+            The distance reading from the sensor
+        """
+        self._timer.start()
+        self._trigger.pulse()
+        while (not self._echo.get()) and (self._timer.get_time().get_seconds() < 0.1):
             pass
 
         return Distance.from_centimeters(
-            (self.timer.get_time().get_seconds() * 34300) / 2.0
+            (self._timer.get_time().get_seconds() * 34300) / 2.0
         )

@@ -26,9 +26,9 @@ class RpiOutput(DigitalOutput):
         None
         """
         super().__init__()
-        self.pin = pin
+        self._pin = pin
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.pin, GPIO.OUT)
+        GPIO.setup(self._pin, GPIO.OUT)
 
     def write(self, state: bool) -> None:
         """Write a state to the output
@@ -42,4 +42,4 @@ class RpiOutput(DigitalOutput):
         -------
         None
         """
-        GPIO.output(self.pin, state)
+        GPIO.output(self._pin, state)

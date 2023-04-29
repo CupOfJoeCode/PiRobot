@@ -26,9 +26,9 @@ class RpiInput(DigitalInput):
         None
         """
         super().__init__()
-        self.pin = pin
+        self._pin = pin
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.pin, GPIO.IN)
+        GPIO.setup(self._pin, GPIO.IN)
 
     def get(self) -> bool:
         """Get the state of the input
@@ -38,4 +38,4 @@ class RpiInput(DigitalInput):
         input : bool
             The state of the input
         """
-        return bool(GPIO.input(self.pin))
+        return bool(GPIO.input(self._pin))
