@@ -1,21 +1,31 @@
 import glob
 from importlib.machinery import SourceFileLoader
+import inspect
 
 all_files = [x.replace("\\", "/") for x in glob.glob("pibot/**/*.py", recursive=True)]
 
 CAPS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 classes = {}
+class_paths = {}
 
 for filename in all_files:
     try:
         mdl = SourceFileLoader("", filename).load_module()
+
         attrs = dir(mdl)
         for a in attrs:
             if a:
                 if a[0] in CAPS:
                     if a not in classes:
                         classes[a] = getattr(mdl, a)
+                        class_paths[a] = "pibot" + (
+                            inspect.getfile(classes[a])
+                            .replace("\\", "/")
+                            .split("pibot")[-1]
+                            .replace("/", ".")
+                            .replace(".py", f".{a}")
+                        )
 
     except ModuleNotFoundError:
         pass
@@ -42,7 +52,7 @@ for c in classes:
     attrs = dir(full)
 
     if full.__doc__ is not None:
-        dcstr += f"# {c}\n\n"
+        dcstr += f"# {c}\n\n`{class_paths[c]}`\n\n"
         dcstr += doc_to_md(full.__doc__)
 
         for at in attrs:
