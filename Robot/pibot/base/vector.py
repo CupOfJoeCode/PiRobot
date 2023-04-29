@@ -71,7 +71,7 @@ class Vector:
         Parameters
         ----------
         color : tuple[int]
-            A 3-element tuple with integers from [0,255] representing (R,G,B)
+            A 3-element tuple with integers from [0,255] representing R,G,B
 
         Returns
         -------
@@ -121,7 +121,7 @@ class Vector:
         Returns
         -------
         color : tuple[int]
-            A 3-element tuple with integers from [0,255] representing (R,G,B)
+            A 3-element tuple with integers from [0,255] representing R,G,B
         """
         return tuple(min(255, max(0, int(x * 255))) for x in [self.x, self.y, self.z])
 
