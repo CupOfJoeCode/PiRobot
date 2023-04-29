@@ -2,7 +2,7 @@ from pibot.rpioutput import RpiOutput
 from pibot.rpiinput import RpiInput
 from pibot.base.distance import DistanceSensor
 from pibot.base.timer import Timer
-from pibot.base.units import Time
+from pibot.base.units import Time, Distance
 
 
 class RpiUltraSonic(DistanceSensor):
@@ -12,11 +12,12 @@ class RpiUltraSonic(DistanceSensor):
         self.echo = RpiInput(echo_pin)
         self.timer = Timer()
 
-    def get_time(self, timeout: Time = Time.from_seconds(1.0)) -> Time:
+    def get_distance(self) -> Distance:
         self.timer.start()
         self.trigger.pulse()
-        while (not self.echo.get()) and (
-            self.timer.get_time().get_seconds() < timeout.get_seconds()
-        ):
+        while (not self.echo.get()) and (self.timer.get_time().get_seconds() < 0.1):
             pass
-        return self.timer.get_time()
+
+        return Distance.from_centimeters(
+            (self.timer.get_time().get_seconds() * 34300) / 2.0
+        )

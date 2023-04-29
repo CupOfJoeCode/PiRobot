@@ -1,12 +1,31 @@
-from pibot.base.units import Distance, Time
+from pibot.base.units import Distance
 
 
 class DistanceSensor:
+    """
+    A sensor that senses the distance to an object
+
+    Methods
+    -------
+    get_distance()
+        Get the distance to an object
+    """
+
     def __init__(self) -> None:
+        """Create a distance sensor
+
+        Returns
+        -------
+        None
+        """
         pass
 
-    def get_time(self) -> Time:
-        return Time(0)
-
     def get_distance(self) -> Distance:
-        return Distance.from_centimeters((self.get_time().get_seconds() * 34300) / 2.0)
+        """Get the distance to an object
+
+        Returns
+        -------
+        distance : Distance
+            the distance to an object
+        """
+        return Distance(0)
