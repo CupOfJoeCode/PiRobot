@@ -27,11 +27,11 @@ class Pose2d:
 
         Parameters
         ----------
-        x : Distance
+        x : Distance, optional
             The x position of the object
-        y : Distance
+        y : Distance, optional
             The y position of the object
-        rotation : Rotation2d
+        rotation : Rotation2d, optional
             The rotation of the object
 
         Returns
@@ -99,16 +99,14 @@ class Pose3d:
 
         Parameters
         ----------
-        x : Distance
+        x : Distance, optional
             The x position of the object
-        y : Distance
+        y : Distance, optional
             The y position of the object
-        z : Distance
+        z : Distance, optional
             The z position of the object
-        rotation : Rotation3d
+        rotation : Rotation3d, optional
             The rotation of the object
-        to_pose2d : Pose2d
-            Project the pose down to 2D space
 
         Returns
         -------
