@@ -3,11 +3,11 @@ import pygame as pg
 
 class DataWidget:
     def __init__(self) -> None:
-        self.title = ''
-        self.text = ''
-        self.background = ((255, 255, 255))
+        self.title = ""
+        self.text = ""
+        self.background = (255, 255, 255)
         self.font = pg.font.Font(None, 32)
-        self.isbool = False
+        self.entry_type = 0
 
     def get_surface(self):
         out_surface = pg.Surface((128, 128))
@@ -22,10 +22,10 @@ class DataWidget:
     def set_title(self, title):
         self.title = title
 
-    def set_value(self, data):
-        if type(data) == bool:
-            self.background = (200, 60, 60) if data else (60, 30, 30)
-            self.text = ''
+    def set_value(self, data, entry_type):
+        if entry_type == 1:
+            self.background = (200, 60, 60) if (data == "1") else (60, 30, 30)
+            self.text = ""
             self.isbool = True
         else:
             self.text = str(data)

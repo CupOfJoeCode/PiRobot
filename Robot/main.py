@@ -7,6 +7,7 @@ from time import sleep
 from flask import Flask, request
 
 from robot import Robot
+from pibot.base.datatable import EntryType
 
 bot = Robot()
 app = Flask(__name__)
@@ -18,10 +19,10 @@ log.setLevel(logging.ERROR)
 def bot_main():
     while bot.running:
         bot.run()
-        bot.data["Stopped"] = False
+        bot.data.put_boolean("Stopped", False)
         sleep(0.05)
     bot.stop()
-    bot.data["Stopped"] = True
+    bot.data.put_boolean("Stopped", True)
 
 
 @app.route("/")
@@ -43,20 +44,27 @@ def trigger_end():
 
 @app.route("/get_data")
 def get_data():
-    return json.dumps(bot.data)
+    out_dict = {}
+    for key in bot.data.entries:
+        entry = bot.data.entries[key]
+        out_dict[key] = {"type": entry.entry_type, "value": entry.value}
+    return json.dumps(out_dict)
 
 
 @app.route("/set_data")
 def set_data():
     key = request.args.get("key")
+    entry_type = int(request.args.get("type"))
     val = request.args.get("value")
-    if val in ["True", "False"]:
-        bot.data[key] = val == "True"
-    else:
-        try:
-            bot.data[key] = float(val)
-        except ValueError:
-            bot.data[key] = val
+
+    if entry_type in range(3):
+        if entry_type == EntryType.NUMBER:
+            bot.data.put_number(key, float(val))
+        elif entry_type == EntryType.BOOL:
+            bot.data.put_boolean(key, val == "1")
+        elif entry_type == EntryType.TEXT:
+            bot.data.put_text(key, val)
+
     return ""
 
 
@@ -86,5 +94,5 @@ def start():
 
 
 if __name__ == "__main__":
-    bot.data["Stopped"] = True
-    app.run(host=sys.argv[1], port=sys.argv[2], debug=False)
+    bot.data.put_boolean("Stopped", True)
+    app.run(host="0.0.0.0", port=sys.argv[1], debug=False)

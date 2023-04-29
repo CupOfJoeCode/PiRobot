@@ -58,7 +58,8 @@ def main():
         for key in robot_data:
             widget = DataWidget()
             widget.set_title(key)
-            widget.set_value(robot_data[key])
+            widget.entry_type = robot_data[key]["type"]
+            widget.set_value(robot_data[key]["value"], widget.entry_type)
 
             widget_x = x_pos * 140 + 10
             widget_y = y_pos * 140 + 10
