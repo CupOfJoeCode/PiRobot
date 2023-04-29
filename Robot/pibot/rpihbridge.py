@@ -4,7 +4,8 @@ from pibot.rpipwm import RpiPWMOutput
 
 class RpiHBridge(Motor):
     """
-    An motor controller for an h-bridge motor driver
+    An motor controller for an h-bridge motor driver connected to a Raspberry Pi.
+    Inherits from `Motor`
 
     Methods
     -------
