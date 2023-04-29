@@ -68,6 +68,18 @@ class Distance:
     def get_thou(self) -> float:
         return self.get_inches() * 1000.0
 
+    def __add__(self, other):
+        return Distance(self._meters + other.get_meters())
+
+    def __sub__(self, other):
+        return Distance(self._meters - other.get_meters())
+
+    def __mul__(self, other: float):
+        return Distance(self._meters * other)
+
+    def __truediv__(self, other: float):
+        return Distance(self._meters / other)
+
 
 class Angle:
     @classmethod
@@ -93,6 +105,18 @@ class Angle:
 
     def get_rotations(self) -> float:
         return self.get_degrees() / 360.0
+
+    def __add__(self, other):
+        return Angle(self._radians + other.get_radians())
+
+    def __sub__(self, other):
+        return Angle(self._radians - other.get_radians())
+
+    def __mul__(self, other: float):
+        return Angle(self._radians * other)
+
+    def __truediv__(self, other: float):
+        return Angle(self._radians / other)
 
 
 class Time:
@@ -154,6 +178,18 @@ class Time:
 
     def get_microseconds(self) -> float:
         return self._seconds * 1000000
+
+    def __add__(self, other):
+        return Time(self._seconds + other.get_seconds())
+
+    def __sub__(self, other):
+        return Time(self._seconds - other.get_seconds())
+
+    def __mul__(self, other: float):
+        return Time(self._seconds * other)
+
+    def __truediv__(self, other: float):
+        return Time(self._seconds / other)
 
 
 class Temperature:
@@ -236,3 +272,15 @@ class Mass:
 
     def get_tons(self) -> float:
         return self.get_pounds() / 2000.0
+
+    def __add__(self, other):
+        return Mass(self._grams + other.get_grams())
+
+    def __sub__(self, other):
+        return Mass(self._grams - other.get_grams())
+
+    def __mul__(self, other: float):
+        return Mass(self._grams * other)
+
+    def __truediv__(self, other: float):
+        return Mass(self._grams / other)
