@@ -2,6 +2,10 @@ import math
 
 
 class Distance:
+    """Wraps a distance to be converted to any unit.
+    Supported units are meters, centimeters, millimeters, kilometers, inches, feet, yards, miles, thou
+    """
+
     @classmethod
     def from_meters(self, meters: float):
         return Distance(meters)
@@ -82,6 +86,10 @@ class Distance:
 
 
 class Angle:
+    """Wraps an angle to be converted to any unit.
+    Supported units are radians, degrees, rotations
+    """
+
     @classmethod
     def from_radians(self, radians: float):
         return Angle(radians)
@@ -120,6 +128,10 @@ class Angle:
 
 
 class Time:
+    """Wraps a time to be converted to any unit.
+    Supported units are seconds, minutes, hours, days, weeks, years, milliseconds, microseconds
+    """
+
     @classmethod
     def from_seconds(self, seconds: float):
         return Time(seconds)
@@ -193,6 +205,10 @@ class Time:
 
 
 class Temperature:
+    """Wraps a temperature to be converted to any unit.
+    Supported units are kelvin, celcius, fahrenheit
+    """
+
     @classmethod
     def from_kelvin(self, kelvin: float):
         return Temperature(kelvin)
@@ -219,7 +235,9 @@ class Temperature:
 
 
 class Mass:
-    # gram, kilogram, milligram, metric_ton, pound, ounce, ton
+    """Wraps a mass to be converted to any unit.
+    Supported units are grams, kilograms, milligrams, metric tons, pounds, ounces, tons
+    """
 
     @classmethod
     def from_grams(self, grams: float):
