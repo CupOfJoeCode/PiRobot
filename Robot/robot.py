@@ -14,6 +14,7 @@ class Robot(BaseRobot):
             "current", Pose2d(rotation=Rotation2d(Angle.from_degrees(45)))
         )
         self.data.put_pose2d("target", Pose2d(Distance(4), Distance(3)))
+        self.data.put_pose2d("pass", Pose2d(Distance(2), Distance(-9)))
 
     def run(self) -> None:
         super().run()

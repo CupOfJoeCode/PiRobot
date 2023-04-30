@@ -1,6 +1,7 @@
 import pygame as pg
 import easygui
 from vecmath import Vector, Rotation2d
+from curve import BezierCurve
 
 
 class TableView:
@@ -69,11 +70,21 @@ class Pose2dView:
             elif scroll == -1:
                 self.ppm *= 1.1
             if mouse_right:
-                name = easygui.enterbox(
-                    "Pose Entry Keys", "Pose Entry", default=(",".join(self.names))
+                line_names = [",".join(point) for point in self.lines]
+                line_names = ";".join(line_names)
+                name = easygui.multenterbox(
+                    "Pose Entries",
+                    "2D Pose Entries",
+                    ["Poses", "Curves"],
+                    [",".join(self.names), line_names],
                 )
                 if name is not None:
-                    self.names = name.split(",")
+                    if name[0]:
+                        self.names = name[0].split(",")
+                    if name[1]:
+                        self.lines = name[1].split(";")
+                        self.lines = [line.split(",") for line in self.lines]
+
         surface = pg.Surface(window_size, pg.SRCALPHA)
         surface.fill((0,) * 4)
         origin = pose2d_translate(Vector(0, 0))
@@ -127,4 +138,24 @@ class Pose2dView:
             )
 
             surface.blit(self.font.render(name), pose2d_translate(position))
+
+        for line in self.lines:
+            curve_points = []
+            for name in line:
+                x_entry = float(table[f"{name}.x"]["value"])
+                y_entry = float(table[f"{name}.y"]["value"])
+                curve_points.append(Vector(x_entry, y_entry))
+
+            if curve_points:
+                curve = BezierCurve(curve_points)
+                prev_point = pose2d_translate(curve.get_point(0))
+                for i in range(1, 51):
+                    pt = pose2d_translate(curve.get_point(i / 50))
+                    pg.draw.line(
+                        surface,
+                        (200, 60, 200),
+                        prev_point,
+                        pt,
+                    )
+                    prev_point = pt
         return surface
