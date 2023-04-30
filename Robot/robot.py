@@ -30,7 +30,7 @@ class Robot(BaseRobot):
         else:
             self.drive.drive(0.0, 0.0)
 
-        self.data.put_pose2d("pose", self.drive.get_pose())
+        self.data.put_pose2d("pose", self.drive.update())
 
     def stop(self) -> None:
         super().stop()
