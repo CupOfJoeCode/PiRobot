@@ -27,6 +27,12 @@ def main():
         mouse_down = mouses[0]
         mouse_right = mouses[2]
         scroll_dir = 0
+        TRIGGERS = {
+            pg.K_UP: "up",
+            pg.K_DOWN: "down",
+            pg.K_LEFT: "left",
+            pg.K_RIGHT: "right",
+        }
 
         for e in pg.event.get():
             if e.type == pg.QUIT:
@@ -40,6 +46,11 @@ def main():
                     requests.get(f"{URL}/start")
                 elif e.key == pg.K_RETURN:
                     requests.get(f"{URL}/stop")
+                elif e.key in TRIGGERS:
+                    requests.get(f"{URL}/trigger_start?trigger={TRIGGERS[e.key]}")
+            elif e.type == pg.KEYUP:
+                if e.key in TRIGGERS:
+                    requests.get(f"{URL}/trigger_end?trigger={TRIGGERS[e.key]}")
             elif e.type == pg.MOUSEBUTTONDOWN:
                 if e.button == 4:
                     scroll_dir = -1
