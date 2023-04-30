@@ -15,6 +15,8 @@ class Pose2d:
         Get the y position of the object
     get_rotation()
         Get the rotation of the object
+    transform_by(transform : Pose2d)
+        Transform the pose using a different pose as a transformation
     """
 
     def __init__(
@@ -70,6 +72,31 @@ class Pose2d:
             The rotation of the object
         """
         return self._rotation
+
+    def transform_by(self, transform):
+        """Transform the pose using a different pose as a transformation
+
+        Parameters
+        ----------
+        transform : Pose2d
+            The transformation to be done represented as a 2D pose
+
+        Returns
+        -------
+        pose : Pose2d
+            The transformed pose
+        """
+        other_vec = Vector(
+            transform.get_x().get_meters(), transform.get_y().get_meters()
+        )
+        other_rot = transform.get_rotation()
+        new_pos = self._position + (self._rotation.rotate(other_vec))
+        new_rot = self._rotation.get_angle() + other_rot.get_angle()
+        return Pose2d(
+            Distance.from_meters(new_pos.x),
+            Distance.from_meters(new_pos.y),
+            Rotation2d(new_rot),
+        )
 
 
 class Pose3d:

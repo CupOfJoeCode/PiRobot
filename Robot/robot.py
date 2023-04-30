@@ -30,7 +30,12 @@ class Robot(BaseRobot):
         else:
             self.drive.drive(0.0, 0.0)
 
-        self.data.put_pose2d("pose", self.drive.update())
+        wheel = Pose2d(
+            y=Distance.from_meters(1), rotation=Rotation2d(Angle.from_degrees(90))
+        )
+        pose = self.drive.update()
+        self.data.put_pose2d("pose", pose)
+        self.data.put_pose2d("wheel", pose.transform_by(wheel))
 
     def stop(self) -> None:
         super().stop()
