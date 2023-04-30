@@ -18,8 +18,6 @@ class Robot(BaseRobot):
 
     def run(self) -> None:
         super().run()
-        while True:
-            pass
 
     def stop(self) -> None:
         super().stop()

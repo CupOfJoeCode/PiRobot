@@ -3,7 +3,7 @@ import pygame as pg
 
 class Font:
     def __init__(self) -> None:
-        self.font = pg.font.Font(None, 24)
+        self.font = pg.font.Font("font.ttf", 16)
         self.memo = {}
 
     def render(self, text: str) -> pg.Surface:
