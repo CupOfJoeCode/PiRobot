@@ -1,10 +1,9 @@
 # PiRobot
 
-A python robot framework for the Raspberry Pi
+A general purpose robotics framework for the Raspberry Pi written in Python
 
 ![icon](icon.png)
 ![coords](coords.png)
-![dimensions](dims.png)
 
 ## TESTING ON WINDOWS
 
