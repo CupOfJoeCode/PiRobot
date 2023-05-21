@@ -13,7 +13,7 @@ An explanation/tutorial on properly setting up a headless Raspberry Pi for robot
 
 ## Testing on Windows
 
-The RPi package does not exist so when testing on windows create a file `./Robot/Rpi/GPIO.py` and place this in the file:
+The RPi package does not exist so when testing on windows create a file `Robot/Rpi/GPIO.py` and place this in the file:
 
 ```Python
 BOARD = 1
