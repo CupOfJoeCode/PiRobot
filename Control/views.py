@@ -65,6 +65,13 @@ class TableView:
                 elif entry["type"] == 1:
                     val = int(entry["value"] == "0")
                     requests.get(f"{self.server}/set_data?type=1&value={val}&key={key}")
+                if entry["type"] == 2:
+                    val = entry["value"]
+                    new_val = easygui.enterbox("Enter a new value", "Edit Text", val)
+                    if new_val is not None:
+                        requests.get(
+                            f"{self.server}/set_data?type=2&value={new_val}&key={key}"
+                        )
             scr_y += 24
         if not mouse_down:
             self.has_held = False
