@@ -2,6 +2,8 @@
 
 A general purpose robotics framework for the Raspberry Pi written in Python
 
+All robot-specific code is to go into the `Robot/` directory. The main execution of the robot is in `Robot/robot.py`.
+
 ![icon](icon.png)
 ![coords](coords.png)
 
