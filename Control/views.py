@@ -2,24 +2,31 @@ import pygame as pg
 import easygui
 from vecmath import Vector, Rotation2d
 from curve import BezierCurve
+import requests
 
 
 class TableView:
-    def __init__(self, font):
+    def __init__(self, font, server):
         self.font = font
         self.scroll_offset = 0
+        self.server = server
+        self.has_held = False
 
     def update(
         self, table, mouse_pos, mouse_rel, mouse_down, mouse_right, scroll, window_size
     ):
         surface = pg.Surface(window_size, pg.SRCALPHA)
         surface.fill((0,) * 4)
+        in_window = False
         if mouse_pos[0] in range(window_size[0]) and mouse_pos[1] in range(
             window_size[1]
         ):
+            in_window = True
             self.scroll_offset += scroll
+            if mouse_right:
+                self.scroll_offset -= mouse_rel[1] * (1 / 24)
         self.scroll_offset = max(0, self.scroll_offset)
-        scr_y = 4 - (self.scroll_offset * 24)
+        scr_y = 4 - int((self.scroll_offset * 24))
         for key in table:
             entry = table[key]
             if entry["type"] == 0:
@@ -36,7 +43,31 @@ class TableView:
                 val = entry["value"]
                 surface.blit(self.font.render(f"{key}: {val}"), (4, scr_y))
 
+            if (
+                in_window
+                and mouse_down
+                and mouse_pos[1] in range(scr_y, scr_y + 24)
+                and not (self.has_held)
+            ):
+                self.has_held = True
+                if entry["type"] == 0:
+                    val = entry["value"]
+                    new_val = easygui.enterbox("Enter a new value", "Edit Number", val)
+                    if new_val is not None:
+                        try:
+                            fval = float(new_val)
+                            requests.get(
+                                f"{self.server}/set_data?type=0&value={fval}&key={key}"
+                            )
+                        except Exception:
+                            pass
+
+                elif entry["type"] == 1:
+                    val = int(entry["value"] == "0")
+                    requests.get(f"{self.server}/set_data?type=1&value={val}&key={key}")
             scr_y += 24
+        if not mouse_down:
+            self.has_held = False
         return surface
 
 

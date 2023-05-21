@@ -60,21 +60,11 @@ def set_data():
     if entry_type in range(3):
         if entry_type == EntryType.NUMBER:
             bot.data.put_number(key, float(val))
-        elif entry_type == EntryType.BOOL:
+        elif entry_type == EntryType.BOOLEAN:
             bot.data.put_boolean(key, val == "1")
         elif entry_type == EntryType.TEXT:
             bot.data.put_text(key, val)
 
-    return ""
-
-
-@app.route("/set_color")
-def set_color():
-    red = int(request.args.get("red"))
-    green = int(request.args.get("green"))
-    blue = int(request.args.get("blue"))
-    threshold = int(request.args.get("threshold"))
-    bot.vision.set_target_color(red, green, blue, threshold)
     return ""
 
 

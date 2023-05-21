@@ -36,10 +36,12 @@ def main():
 
     print(URL)
     pg.init()
+    pg.display.set_caption("PiRobot Control")
+    pg.display.set_icon(pg.image.load("icon.png"))
     d = pg.display.set_mode((800, 600), pg.RESIZABLE)
     font = Font()
 
-    table_view = TableView(font)
+    table_view = TableView(font, URL)
     pose2d_view = Pose2dView(font)
 
     while True:
