@@ -7,6 +7,10 @@ All robot-specific code is to go into the `Robot/` directory. The main execution
 ![icon](icon.png)
 ![coords](coords.png)
 
+## Headless Setup
+
+An explanation/tutorial on properly setting up a headless Raspberry Pi for robotics applications using this framework is to come in future.
+
 ## TESTING ON WINDOWS
 
 The RPi package does not exist so when testing on windows create a file `./Robot/Rpi/GPIO.py` and place this in the file:
