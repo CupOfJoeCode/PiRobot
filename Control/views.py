@@ -7,14 +7,19 @@ from curve import BezierCurve
 class TableView:
     def __init__(self, font):
         self.font = font
+        self.scroll_offset = 0
 
     def update(
         self, table, mouse_pos, mouse_rel, mouse_down, mouse_right, scroll, window_size
     ):
         surface = pg.Surface(window_size, pg.SRCALPHA)
         surface.fill((0,) * 4)
-
-        scr_y = 4
+        if mouse_pos[0] in range(window_size[0]) and mouse_pos[1] in range(
+            window_size[1]
+        ):
+            self.scroll_offset += scroll
+        self.scroll_offset = max(0, self.scroll_offset)
+        scr_y = 4 - (self.scroll_offset * 24)
         for key in table:
             entry = table[key]
             if entry["type"] == 0:
@@ -27,7 +32,7 @@ class TableView:
                 bg.fill((200, 60, 60) if val else (60, 0, 0))
                 bg.blit(keysurf, (0, 0))
                 surface.blit(bg, (4, scr_y))
-            elif entry["type"] == 0:
+            elif entry["type"] == 2:
                 val = entry["value"]
                 surface.blit(self.font.render(f"{key}: {val}"), (4, scr_y))
 

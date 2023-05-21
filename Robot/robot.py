@@ -13,30 +13,15 @@ class Robot(BaseRobot):
         super().__init__()
         robot_map = BaseMap()
 
-        self.drive = VirtualDiffDrive(
-            Distance.from_inches(1), Angle.from_degrees(1), 0.9
-        )
+        for i in range(8):
+            self.data.put_number(f"number{i}", i)
+        for i in range(8):
+            self.data.put_boolean(f"bool{i}", (i % 2) == 0)
+        for i in range(8):
+            self.data.put_text(f"text{i}", f"t{i}t")
 
     def run(self) -> None:
         super().run()
-        if self.triggered("up"):
-            self.drive.drive(1.0, 1.0)
-        elif self.triggered("down"):
-            self.drive.drive(-1.0, -1.0)
-        elif self.triggered("left"):
-            self.drive.drive(-1.0, 1.0)
-        elif self.triggered("right"):
-            self.drive.drive(1.0, -1.0)
-        else:
-            self.drive.drive(0.0, 0.0)
-
-        wheel = Pose2d(
-            y=Distance.from_meters(1), rotation=Rotation2d(Angle.from_degrees(90))
-        )
-        pose = self.drive.update()
-        self.data.put_pose2d("pose", pose)
-        self.data.put_pose2d("wheel", pose.transform_by(wheel))
 
     def stop(self) -> None:
         super().stop()
-        self.drive.drive(0.0, 0.0)
