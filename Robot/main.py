@@ -94,5 +94,10 @@ def start():
 
 
 if __name__ == "__main__":
+    port = "58012"
+    for arg in sys.argv:
+        if arg.startswith("-p"):
+            port = arg[2:]
+
     bot.data.put_boolean("Stopped", True)
-    app.run(host="0.0.0.0", port=sys.argv[1], debug=False)
+    app.run(host="0.0.0.0", port=port, debug=False)

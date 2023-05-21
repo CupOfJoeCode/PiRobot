@@ -4,15 +4,37 @@ from font import Font
 import requests
 import json
 import easygui
-from vecmath import Vector, Rotation2d, Rotation3d
 from views import TableView, Pose2dView
 
 
 def main():
-    SERVER = sys.argv[1]
-    PORT = sys.argv[2]
+    SERVER = "192.168.5.1"
+    PORT = "58012"
+
+    if ("-h" in sys.argv) or ("--help" in sys.argv):
+        print(
+            "Options: \n-h, --help: Show this menu\n-i <IP>: specify the IP Address\n-p <PORT>: specify the port"
+        )
+        return
+
+    server_flag = False
+    port_flag = False
+    for arg in sys.argv:
+        if server_flag:
+            SERVER = arg
+            server_flag = False
+        elif port_flag:
+            PORT = arg
+            port_flag = False
+        else:
+            if arg.startswith("-i"):
+                server_flag = True
+            elif arg.startswith("-p"):
+                port_flag = True
+
     URL = f"http://{SERVER}:{PORT}"
 
+    print(URL)
     pg.init()
     d = pg.display.set_mode((800, 600), pg.RESIZABLE)
     font = Font()
