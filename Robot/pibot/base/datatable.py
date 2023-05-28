@@ -164,7 +164,7 @@ class DataTable:
         if self.entries[key].entry_type != EntryType.NUMBER:
             return default
 
-        return self.entries[key].value
+        return float(self.entries[key].value)
 
     def get_boolean(self, key: str, default: bool = False) -> bool:
         """Get a boolean from the table
@@ -187,7 +187,7 @@ class DataTable:
         if self.entries[key].entry_type != EntryType.BOOLEAN:
             return default
 
-        return self.entries[key].value
+        return self.entries[key].value == "1"
 
     def get_text(self, key: str, default: str = "") -> str:
         """Get a string from the table
